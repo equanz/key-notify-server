@@ -5,12 +5,12 @@ import(
   "github.com/gin-gonic/gin"
 )
 
+// server
 func main(){
   r := gin.Default()
-  r.GET("/", func(c *gin.Context){
-    c.JSON(200, gin.H{
-      "message": "Hello, world!",
-    })
+  r.POST("/hard/on", func(c *gin.Context){
+
+    c.String(200, "Key On!")
   })
 
   r.Run()
