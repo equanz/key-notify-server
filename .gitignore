@@ -1,0 +1,6 @@
+# dirend
+.direnv
+
+# dep
+vendor/
+
