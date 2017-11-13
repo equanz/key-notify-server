@@ -8,8 +8,14 @@ import(
 // server
 func main(){
   r := gin.Default()
-  r.POST("/hard/on", func(c *gin.Context){
 
+  // root
+  r.GET("/", func(c *gin.Context){
+    c.String(200, "Hello, world!")
+  })
+
+  // key on
+  r.POST("/hard/on", func(c *gin.Context){
     c.String(200, "Key On!")
   })
 
