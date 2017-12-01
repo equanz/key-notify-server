@@ -1,3 +1,5 @@
+/* Package: サーバ本体
+*/
 package main
 
 // import
@@ -7,7 +9,7 @@ import(
   "github.com/nlopes/slack"
 )
 
-// server
+// serverの作成
 func main(){
   r := gin.Default()
 
@@ -25,6 +27,9 @@ func main(){
   r.Run()
 }
 
+/* Slack botでの通知
+ * is_onboard: bool trueの際，Onとして通知
+*/
 func send_form_message(is_onboard bool){
   // slack bot api instance
   api := slack.New(os.Getenv("SLACK_BOT_TOKEN"))
