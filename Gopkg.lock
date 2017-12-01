@@ -17,7 +17,7 @@
   branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
-  revision = "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
+  revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
 
 [[projects]]
   name = "github.com/mattn/go-isatty"
@@ -26,16 +26,28 @@
   version = "v0.0.3"
 
 [[projects]]
+  name = "github.com/nlopes/slack"
+  packages = ["."]
+  revision = "c86337c0ef2486a15edd804355d9c73d2f2caed1"
+  version = "v0.1.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/ugorji/go"
   packages = ["codec"]
-  revision = "dd3aa7221b0c7a61c3ea1a0a252d06efa5161e3f"
+  revision = "7a1de86227c3a2d8c266c99436d6cf6685d0dc53"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["websocket"]
+  revision = "9dfe39835686865bff950a07b394c12a98ddc811"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "1e2299c37cc91a509f1b12369872d27be0ce98a6"
+  revision = "8b4580aae2a0dd0c231a45d3ccb8434ff533b840"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -47,11 +59,11 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1a2b10f3ec80fa4b6ad88156b737403ca45820640ec668e0b797538b6274d305"
+  inputs-digest = "6b025294062656c05f15b03a1893a1eb6a9f24af77a44408d6cb47a042fdbbe1"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -1,5 +1,5 @@
 # dirend
-.direnv
+.envrc
 
 # dep
 vendor/
