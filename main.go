@@ -16,12 +16,21 @@ func main(){
   // root
   r.GET("/", func(c *gin.Context){
     c.String(200, "Hello, world!")
-    send_form_message(true)
   })
 
-  // key on
-  r.POST("/hard/on", func(c *gin.Context){
-    c.String(200, "Key On!")
+  // key on or off
+  r.POST("/hard/:status", func(c *gin.Context){
+    state := c.Param("status")
+    if state == "on"{
+      send_form_message(true)
+      c.String(200, "ON")
+    } else if state == "off"{
+      send_form_message(false)
+      c.String(200, "OFF")
+    } else{
+      // error
+      c.String(400, "Bad Request")
+    }
   })
 
   r.Run()
