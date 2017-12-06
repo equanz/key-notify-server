@@ -1,5 +1,5 @@
 CREATE TABLE key_info(
   time DATETIME NOT NULL,
-  state ENUM('put','leave') NOT NULL,
-  key_info_id INT NOT NULL
+  state ENUM('ON','OFF') NOT NULL,
+  key_info_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
