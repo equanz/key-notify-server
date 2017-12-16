@@ -43,11 +43,11 @@ func main(){
     */
     api.GET("/statistics", func(c *gin.Context){
       q := c.Request.URL.Query() // query params
-      fds, fd_ok := q["first_date"]
+      fd, fd_ok := q["first_date"]
 
       // TODO: return result about statistics data from SQL
       if fd_ok == true {
-        c.String(200, fds[0])
+        c.String(200, fd[0])
       } else{
         c.String(200, "ALL")
       }
