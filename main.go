@@ -18,20 +18,24 @@ func main(){
     c.String(200, "Hello, world!")
   })
 
-  // key on or off
-  r.POST("/hard/:status", func(c *gin.Context){
-    state := c.Param("status")
-    if state == "on"{
-      send_form_message(true)
-      c.String(200, "ON")
-    } else if state == "off"{
-      send_form_message(false)
-      c.String(200, "OFF")
-    } else{
-      // error
-      c.String(400, "Bad Request")
-    }
-  })
+  // '/api' group
+  api := r.Group("/api")
+  {
+    // key on or off
+    api.POST("/hard/:status", func(c *gin.Context){
+      state := c.Param("status")
+      if state == "on"{
+        send_form_message(true)
+        c.String(200, "ON")
+      } else if state == "off"{
+        send_form_message(false)
+        c.String(200, "OFF")
+      } else{
+        // error
+        c.String(400, "Bad Request")
+      }
+    })
+  }
 
   r.Run()
 }
@@ -51,7 +55,7 @@ func send_form_message(is_onboard bool){
     rtm.SendMessage(rtm.NewOutgoingMessage("ON Board!", os.Getenv("CHANNEL")))
   } else {
     // out board
-    rtm.SendMessage(rtm.NewOutgoingMessage("OUT Board!", os.Getenv("CHANNEL")))
+    rtm.SendMessage(rtm.NewOutgoingMessage("OFF Board!", os.Getenv("CHANNEL")))
   }
 }
 
