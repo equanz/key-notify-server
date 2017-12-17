@@ -2,25 +2,25 @@ package sql_query
 
 import(
   "fmt"
+  "log"
   "os"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
 )
 
 // connection var
-var db = create_connection()
+var db *sql.DB
 
-
-func create_connection(){
-  db, err := sql.Open("mysql", os.Getenv("MARIA_USER") + ":" + os.Getenv("MARIA_PASS") + "@tcp(" + os.Getenv("MARIA_HOST") +":" + os.Getenv("MARIA_PORT") +")/" + os.Getenv("MARIA_DB"))
+func init(){
+  db_local, err := sql.Open("mysql", os.Getenv("MARIA_USER") + ":" + os.Getenv("MARIA_PASS") + "@tcp(" + os.Getenv("MARIA_HOST") +":" + os.Getenv("MARIA_PORT") +")/" + os.Getenv("MARIA_DB"))
   if err == nil {
-    return db
+    db = db_local
   } else {
     log.Fatal(err)
   }
 }
 
-func get_all_statistics(){
+func Get_all_statistics() (*sql.Rows){
   rows, err := db.Query("SELECT * FROM key_info")
   if err != nil {
     log.Fatal(err)
@@ -28,7 +28,7 @@ func get_all_statistics(){
   return rows
 }
 
-func get_statistics(fd String){
+func Get_statistics(fd string) (*sql.Rows){
   rows, err := db.Query("SELECT * FROM key_info WHERE time >= ?", fd)
     if err != nil {
     log.Fatal(err)

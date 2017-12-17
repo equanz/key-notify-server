@@ -4,6 +4,7 @@ package main
 
 // import
 import(
+  "key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
   "os"
   "github.com/nlopes/slack"
