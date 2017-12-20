@@ -4,6 +4,7 @@ package main
 
 // import
 import(
+  "fmt"
   "key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
   "os"
@@ -50,6 +51,8 @@ func main(){
       if fd_ok == true {
         c.String(200, fd[0])
       } else{
+        fmt.Print(sql_query.Get_all_statistics())
+
         c.String(200, "ALL")
       }
     })
