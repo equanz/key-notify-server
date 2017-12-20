@@ -9,6 +9,8 @@ import(
   "github.com/gin-gonic/gin"
   "os"
   "github.com/nlopes/slack"
+  "encoding/json"
+  "time"
 )
 
 // serverの作成
@@ -47,13 +49,30 @@ func main(){
       q := c.Request.URL.Query() // query params
       fd, fd_ok := q["first_date"]
 
-      // TODO: return result about statistics data from SQL
       if fd_ok == true {
-        c.String(200, fd[0])
+        time, err := time.Parse("2006-01-02 15:04:05", fd[0]) // parse to format
+        if err != nil {
+          fmt.Println(err)
+          c.String(400, "Bad Request")
+        } else {
+          info_array := sql_query.Get_statistics(time.String())
+          info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
+          if err != nil {
+            fmt.Println(err)
+            c.String(400, "Bad Request")
+          } else {
+            c.String(200, string(info_array_json)) // stringify and response
+          }
+        }
       } else{
-        fmt.Print(sql_query.Get_all_statistics())
-
-        c.String(200, "ALL")
+        info_array := sql_query.Get_all_statistics()
+        info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
+        if err != nil {
+          fmt.Println(err)
+          c.String(400, "Bad Request")
+        } else {
+          c.String(200, string(info_array_json)) // stringify and response
+        }
       }
     })
   }
