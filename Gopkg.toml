@@ -22,6 +22,7 @@
 
 [metadata.heroku]
   root-package = "github.com/rikyuusima/key-notify-server" # root package name
+  go-version = "go1.8.5"
   install = ["./..."] # all package and subpackage of the current dirs
 
 [[constraint]]
