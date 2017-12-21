@@ -5,7 +5,7 @@ package main
 // import
 import(
   "fmt"
-  "github.com/rikyuusima/key-notify-server/sql_query"
+  "key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
   "os"
   "github.com/nlopes/slack"
