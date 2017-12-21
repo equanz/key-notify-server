@@ -21,7 +21,8 @@
 #  version = "2.4.0"
 
 [metadata.heroku]
-  root-package = "github.com/rikyuusima/key-notify-server"
+  root-package = "github.com/rikyuusima/key-notify-server" # root package name
+  install = ["./..."] # all package and subpackage of the current dirs
 
 [[constraint]]
   name = "github.com/gin-gonic/gin"
