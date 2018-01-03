@@ -7,6 +7,7 @@ import(
   "fmt"
   "github.com/equanz/key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
+  "github.com/gin-gonic/autotls"
   "os"
   "github.com/nlopes/slack"
   "encoding/json"
