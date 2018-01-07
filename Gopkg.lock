@@ -41,19 +41,19 @@
   branch = "master"
   name = "github.com/ugorji/go"
   packages = ["codec"]
-  revision = "7a1de86227c3a2d8c266c99436d6cf6685d0dc53"
+  revision = "ccfe18359b55b97855cee1d3f74e5efbda4869dc"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["websocket"]
-  revision = "9dfe39835686865bff950a07b394c12a98ddc811"
+  revision = "d866cfc389cec985d6fda2859936a575a55a3ab6"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "8b4580aae2a0dd0c231a45d3ccb8434ff533b840"
+  revision = "83801418e1b59fb1880e363299581ee543af32ca"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -65,11 +65,11 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
+  revision = "c95af922eae69f190717a0b7148960af8c55a072"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e8290f9d36c2ceb753f05fd91146cf5ed1197641313b949818a9039c08b0ea61"
+  inputs-digest = "73c672f90c11407f5e95e77352cee0241d4a4346417c2e3eb27a3c1883f937db"
   solver-name = "gps-cdcl"
   solver-version = 1

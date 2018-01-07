@@ -43,7 +43,7 @@ func Get_all_statistics() ([]Key_info){
     if err := rows.Scan(&info.Time, &info.State, &info.Key_info_id); err != nil {
       log.Fatal(err)
     }
-    info_array = append(info_array, info)
+    info_array = append(info_array, info) // append to array
   }
 
   return info_array

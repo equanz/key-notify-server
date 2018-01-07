@@ -21,8 +21,17 @@
 #  version = "2.4.0"
 
 [metadata.heroku]
-  root-package = "github.com/rikyuusima/key-notify-server"
+  root-package = "github.com/equanz/key-notify-server" # root package name
+  go-version = "go1.8.5"
 
 [[constraint]]
   name = "github.com/gin-gonic/gin"
   version = "1.2.0"
+
+[[constraint]]
+  name = "github.com/go-sql-driver/mysql"
+  version = "1.3.0"
+
+[[constraint]]
+  name = "github.com/nlopes/slack"
+  version = "0.1.0"
