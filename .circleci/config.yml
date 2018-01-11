@@ -10,7 +10,11 @@ jobs:
       - checkout
 
       # Install requirements
-      - run: dep ensure
+      - run:
+          name: Install dep and requirements
+          command: |
+            go get -u github.com/golang/dep/cmd/dep
+            dep ensure
 
       # Run static code analyzer
       - run:
