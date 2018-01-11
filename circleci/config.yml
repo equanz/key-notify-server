@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    # Set Docker image
+    docker:
+      - image: circleci/golang:1.8.5
+    working_directory: /go/src/github.com/equanz/key-notify-server
+
+    steps:
+      - checkout
+
+      # Install requirements
+      - run: dep ensure
+
+      # Run static code analyzer
+      - run:
+          name: Run static code analyzer(go vet)
+          command: go vet $(go list ./... | grep -v /vendor/)
+
