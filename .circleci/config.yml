@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  go_vet:
+  build:
     # Set Docker image
     docker:
       - image: circleci/golang:1.8.5
