@@ -29,13 +29,21 @@ func main(){
      * :status: string "on", "off"文字列をそれぞれハードウェアのon, offとして処理
     */
     api.POST("/hard/:status", func(c *gin.Context){
+      q := c.Request.URL.Query() // query params
+      app_id, app_id_ok := q["app_id"]
       state := c.Param("status")
-      if state == "on"{
-        send_form_message(true)
-        c.String(200, "ON")
-      } else if state == "off"{
-        send_form_message(false)
-        c.String(200, "OFF")
+
+      if app_id_ok == true && sql_query.Has_app_id(app_id[0]) == true{ // search app_id
+        if state == "on"{
+          send_form_message(true)
+          c.String(200, "ON")
+        } else if state == "off"{
+          send_form_message(false)
+          c.String(200, "OFF")
+        } else{
+          // error
+          c.String(400, "Bad Request")
+        }
       } else{
         // error
         c.String(400, "Bad Request")

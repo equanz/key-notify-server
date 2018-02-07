@@ -54,7 +54,7 @@ func Get_all_statistics() ([]Key_info){
 */
 func Get_statistics(fd string) ([]Key_info){
   rows, err := db.Query("SELECT * FROM key_info WHERE time >= ?", fd)
-    if err != nil {
+  if err != nil {
     log.Fatal(err)
   }
   var info_array []Key_info
@@ -67,5 +67,27 @@ func Get_statistics(fd string) ([]Key_info){
     info_array = append(info_array, info)
   }
   return info_array
+}
+
+/* app_idがDBに格納されていれば真
+ * app_id: string 要求されたapp_id
+*/
+func Has_app_id(app_id string) (bool){
+  rows, err := db.Query("SELECT COUNT(*) FROM app_id WHERE app_id = ?", app_id)
+  if err != nil {
+    log.Fatal(err)
+  }
+  var db_count int
+  defer rows.Close()
+  for rows.Next() {
+    if err := rows.Scan(&db_count); err != nil {
+      log.Fatal(err)
+    }
+  }
+  if db_count == 0 {
+    return false
+  } else {
+    return true
+  }
 }
 
