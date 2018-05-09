@@ -73,20 +73,26 @@ func main(){
           fmt.Println(err)
           c.String(400, "Bad Request")
         } else {
-          info_array := sql_query.Get_statistics(time.String())
-          info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
-          if err != nil {
-            fmt.Println(err)
+          info_array, err_sql := sql_query.Get_statistics(time.String())
+          info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
+          if err_sql != nil {
+            fmt.Println(err_sql)
+            c.String(400, "Bad Request")
+          } else if err_json != nil{
+            fmt.Println(err_json)
             c.String(400, "Bad Request")
           } else {
             c.String(200, string(info_array_json)) // stringify and response
           }
         }
       } else{
-        info_array := sql_query.Get_all_statistics()
-        info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
-        if err != nil {
-          fmt.Println(err)
+        info_array, err_sql := sql_query.Get_all_statistics()
+        info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
+        if err_sql != nil {
+          fmt.Println(err_sql)
+          c.String(400, "Bad Request")
+        } else if err_json != nil {
+          fmt.Println(err_json)
           c.String(400, "Bad Request")
         } else {
           c.String(200, string(info_array_json)) // stringify and response
