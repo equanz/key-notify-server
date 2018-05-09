@@ -13,6 +13,7 @@ import(
   "time"
 )
 
+// app_id認証body用struct
 type StatusJSON struct{
   AppID string `json:"app_id" binding:"required"`
 }
