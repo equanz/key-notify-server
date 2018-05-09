@@ -7,11 +7,16 @@ import(
   "fmt"
   "github.com/equanz/key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
+  //"github.com/gin-gonic/gin/binding"
   "os"
   "github.com/nlopes/slack"
   "encoding/json"
   "time"
 )
+
+type StatusJSON struct{
+  AppID string `json:"app_id" binding:"required"`
+}
 
 // serverの作成
 func main(){
@@ -29,24 +34,30 @@ func main(){
      * :status: string "on", "off"文字列をそれぞれハードウェアのon, offとして処理
     */
     api.POST("/hard/:status", func(c *gin.Context){
-      q := c.Request.URL.Query() // query params
-      app_id, app_id_ok := q["app_id"]
+      var body StatusJSON
+      c.BindJSON(&body) // bind post body
       state := c.Param("status")
 
-      if app_id_ok == true && sql_query.Has_app_id(app_id[0]) == true{ // search app_id
-        if state == "on"{
-          send_form_message(true)
-          c.String(200, "ON")
-        } else if state == "off"{
-          send_form_message(false)
-          c.String(200, "OFF")
+      has_app_id, err := sql_query.Has_app_id(body.AppID) // search app_id
+      if err == nil{
+        if body.AppID != "" && has_app_id == true{
+          if state == "on"{
+            send_form_message(true)
+            c.String(200, "ON")
+          } else if state == "off"{
+            send_form_message(false)
+            c.String(200, "OFF")
+          } else{
+            // error
+            c.String(400, "Bad Request")
+          }
         } else{
           // error
           c.String(400, "Bad Request")
         }
       } else{
         // error
-        c.String(400, "Bad Request")
+        c.String(503, "Service Unavailable")
       }
     })
 

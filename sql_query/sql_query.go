@@ -31,63 +31,63 @@ func init(){
 
 /* 統計データ全件抽出
 */
-func Get_all_statistics() ([]Key_info){
+func Get_all_statistics() ([]Key_info, error){
   rows, err := db.Query("SELECT * FROM key_info")
   if err != nil {
-    log.Fatal(err)
+    return nil, err
   }
   var info_array []Key_info
   defer rows.Close()
   for rows.Next() {
     var info Key_info
     if err := rows.Scan(&info.Time, &info.State, &info.Key_info_id); err != nil {
-      log.Fatal(err)
+      return nil, err
     }
     info_array = append(info_array, info) // append to array
   }
 
-  return info_array
+  return info_array, nil
 }
 
 /* 統計データ指定日時から最新まで抽出
  * fd: string(DATETIMEフォーマット) 取得する統計値の指定日時
 */
-func Get_statistics(fd string) ([]Key_info){
+func Get_statistics(fd string) ([]Key_info, error){
   rows, err := db.Query("SELECT * FROM key_info WHERE time >= ?", fd)
   if err != nil {
-    log.Fatal(err)
+    return nil, err
   }
   var info_array []Key_info
   defer rows.Close()
   for rows.Next() {
     var info Key_info
     if err := rows.Scan(&info.Time, &info.State, &info.Key_info_id); err != nil {
-      log.Fatal(err)
+      return nil, err
     }
     info_array = append(info_array, info)
   }
-  return info_array
+  return info_array, nil
 }
 
 /* app_idがDBに格納されていれば真
  * app_id: string 要求されたapp_id
 */
-func Has_app_id(app_id string) (bool){
+func Has_app_id(app_id string) (bool, error){
   rows, err := db.Query("SELECT COUNT(*) FROM app_id WHERE app_id = ?", app_id)
   if err != nil {
-    log.Fatal(err)
+    return false, err
   }
   var db_count int
   defer rows.Close()
   for rows.Next() {
     if err := rows.Scan(&db_count); err != nil {
-      log.Fatal(err)
+      return false, err
     }
   }
   if db_count == 0 {
-    return false
+    return false, nil
   } else {
-    return true
+    return true, nil
   }
 }
 
