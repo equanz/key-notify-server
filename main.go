@@ -13,6 +13,11 @@ import(
   "time"
 )
 
+// app_id認証body用struct
+type StatusJSON struct{
+  AppID string `json:"app_id" binding:"required"`
+}
+
 // serverの作成
 func main(){
   r := gin.Default()
@@ -29,16 +34,30 @@ func main(){
      * :status: string "on", "off"文字列をそれぞれハードウェアのon, offとして処理
     */
     api.POST("/hard/:status", func(c *gin.Context){
+      var body StatusJSON
+      c.BindJSON(&body) // bind post body
       state := c.Param("status")
-      if state == "on"{
-        send_form_message(true)
-        c.String(200, "ON")
-      } else if state == "off"{
-        send_form_message(false)
-        c.String(200, "OFF")
+
+      has_app_id, err := sql_query.Has_app_id(body.AppID) // search app_id
+      if err == nil{
+        if body.AppID != "" && has_app_id == true{
+          if state == "on"{
+            send_form_message(true)
+            c.String(200, "ON")
+          } else if state == "off"{
+            send_form_message(false)
+            c.String(200, "OFF")
+          } else{
+            // error
+            c.String(400, "Bad Request")
+          }
+        } else{
+          // error
+          c.String(400, "Bad Request")
+        }
       } else{
         // error
-        c.String(400, "Bad Request")
+        c.String(503, "Service Unavailable")
       }
     })
 
@@ -55,20 +74,26 @@ func main(){
           fmt.Println(err)
           c.String(400, "Bad Request")
         } else {
-          info_array := sql_query.Get_statistics(time.String())
-          info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
-          if err != nil {
-            fmt.Println(err)
+          info_array, err_sql := sql_query.Get_statistics(time.String())
+          info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
+          if err_sql != nil {
+            fmt.Println(err_sql)
+            c.String(400, "Bad Request")
+          } else if err_json != nil{
+            fmt.Println(err_json)
             c.String(400, "Bad Request")
           } else {
             c.String(200, string(info_array_json)) // stringify and response
           }
         }
       } else{
-        info_array := sql_query.Get_all_statistics()
-        info_array_json, err := json.Marshal(info_array) // generate json bytes from struct
-        if err != nil {
-          fmt.Println(err)
+        info_array, err_sql := sql_query.Get_all_statistics()
+        info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
+        if err_sql != nil {
+          fmt.Println(err_sql)
+          c.String(400, "Bad Request")
+        } else if err_json != nil {
+          fmt.Println(err_json)
           c.String(400, "Bad Request")
         } else {
           c.String(200, string(info_array_json)) // stringify and response
