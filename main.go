@@ -117,10 +117,10 @@ func send_form_message(is_onboard bool){
 
   if is_onboard == true {
     // on board
-    rtm.SendMessage(rtm.NewOutgoingMessage("ON Board!", os.Getenv("CHANNEL")))
+    rtm.SendMessage(rtm.NewOutgoingMessage(os.Getenv("ON_MESSAGE"), os.Getenv("CHANNEL")))
   } else {
     // out board
-    rtm.SendMessage(rtm.NewOutgoingMessage("OFF Board!", os.Getenv("CHANNEL")))
+    rtm.SendMessage(rtm.NewOutgoingMessage(os.Getenv("OFF_MESSAGE"), os.Getenv("CHANNEL")))
   }
 }
 
