@@ -11,6 +11,7 @@ import(
   "github.com/nlopes/slack"
   "encoding/json"
   "time"
+  "net/http"
 )
 
 // app_id認証body用struct
@@ -26,6 +27,9 @@ func main(){
   r.GET("/", func(c *gin.Context){
     c.String(200, "Hello, world!")
   })
+
+  // return html
+  r.StaticFS("/html", http.Dir("html"))
 
   // '/api' group
   api := r.Group("/api")
@@ -123,4 +127,3 @@ func send_form_message(is_onboard bool){
     rtm.SendMessage(rtm.NewOutgoingMessage(os.Getenv("OFF_MESSAGE"), os.Getenv("CHANNEL")))
   }
 }
-
