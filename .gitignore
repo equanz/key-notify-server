@@ -4,3 +4,6 @@
 # dep
 vendor/
 
+# npm
+node_modules/
+

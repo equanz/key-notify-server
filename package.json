@@ -1,0 +1,26 @@
+{
+  "name": "key-notify-server",
+  "version": "1.0.0",
+  "description": "[![CircleCI](https://circleci.com/gh/equanz/key-notify-server/tree/master.svg?style=svg)](https://circleci.com/gh/equanz/key-notify-server/tree/master)",
+  "scripts": {
+    "build": "webpack --config app/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/equanz/key-notify-server.git"
+  },
+  "author": "equanz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/equanz/key-notify-server.git/issues"
+  },
+  "homepage": "https://github.com/equanz/key-notify-server.git#readme",
+  "dependencies": {
+    "css-loader": "^0.28.11",
+    "vue": "^2.5.16",
+    "vue-loader": "^15.2.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.4"
+  }
+}
