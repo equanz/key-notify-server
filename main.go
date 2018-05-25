@@ -25,11 +25,11 @@ func main(){
 
   // root
   r.GET("/", func(c *gin.Context){
-    c.String(200, "Hello, world!")
+    c.Redirect(http.StatusMovedPermanently, "/app")
   })
 
-  // return html
-  r.StaticFS("/html", http.Dir("html"))
+  // file access
+  r.StaticFS("/app", http.Dir("app"))
 
   // '/api' group
   api := r.Group("/api")
