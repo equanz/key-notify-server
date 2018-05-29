@@ -7,8 +7,6 @@ import(
   "fmt"
   "github.com/equanz/key-notify-server/sql_query"
   "github.com/gin-gonic/gin"
-  "os"
-  "github.com/nlopes/slack"
   "encoding/json"
   "time"
   "net/http"
@@ -43,23 +41,29 @@ func main(){
       state := c.Param("status")
 
       has_app_id, err := sql_query.Has_app_id(body.AppID) // search app_id
-      if err == nil{
-        if body.AppID != "" && has_app_id == true{
-          if state == "on"{
-            send_form_message(true)
-            c.String(200, "ON")
-          } else if state == "off"{
-            send_form_message(false)
-            c.String(200, "OFF")
-          } else{
+      if err == nil {
+        if body.AppID != "" && has_app_id == true {
+          if state == "on" {
+            if send_form_message(true) == nil {
+              c.String(200, "ON")
+            } else {
+              c.String(400, "Bad Request")
+            }
+          } else if state == "off" {
+            if send_form_message(false) == nil {
+              c.String(200, "OFF")
+            } else {
+              c.String(400, "Bad Request")
+            }
+          } else {
             // error
             c.String(400, "Bad Request")
           }
-        } else{
+        } else {
           // error
           c.String(400, "Bad Request")
         }
-      } else{
+      } else {
         // error
         c.String(503, "Service Unavailable")
       }
@@ -83,14 +87,14 @@ func main(){
           if err_sql != nil {
             fmt.Println(err_sql)
             c.String(400, "Bad Request")
-          } else if err_json != nil{
+          } else if err_json != nil {
             fmt.Println(err_json)
             c.String(400, "Bad Request")
           } else {
             c.String(200, string(info_array_json)) // stringify and response
           }
         }
-      } else{
+      } else {
         info_array, err_sql := sql_query.Get_all_statistics()
         info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
         if err_sql != nil {
@@ -109,21 +113,3 @@ func main(){
   r.Run()
 }
 
-/* Slack botでの通知
- * is_onboard: bool trueの際，Onとして通知
-*/
-func send_form_message(is_onboard bool){
-  // slack bot api instance
-  api := slack.New(os.Getenv("SLACK_BOT_TOKEN"))
-  // slack rtm instance
-  rtm := api.NewRTM()
-  go rtm.ManageConnection()
-
-  if is_onboard == true {
-    // on board
-    rtm.SendMessage(rtm.NewOutgoingMessage(os.Getenv("ON_MESSAGE"), os.Getenv("CHANNEL")))
-  } else {
-    // out board
-    rtm.SendMessage(rtm.NewOutgoingMessage(os.Getenv("OFF_MESSAGE"), os.Getenv("CHANNEL")))
-  }
-}
