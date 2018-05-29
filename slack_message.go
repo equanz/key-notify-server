@@ -12,9 +12,10 @@ import(
 func send_form_message(is_onboard bool) (error){
   const SLACK_ENDPOINT = "https://slack.com/api/chat.postMessage" // endpoint url
 
+  // set request values
    req_val := url.Values{
-    "token": {os.Getenv("SLACK_BOT_TOKEN")},
-    "channel": {os.Getenv("CHANNEL")},
+    "token": {os.Getenv("SLACK_BOT_TOKEN")}, // bot token
+    "channel": {os.Getenv("CHANNEL")}, // channel id
     "as_user": {"true"}, // use default botname
    }
 
@@ -26,6 +27,7 @@ func send_form_message(is_onboard bool) (error){
     req_val.Add("text", os.Getenv("OFF_MESSAGE"))
   }
 
+  // send post request
   res, err := http.PostForm(SLACK_ENDPOINT, req_val)
 
   if err != nil {
