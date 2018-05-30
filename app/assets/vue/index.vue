@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <h1>My Key-Notify App!</h1>
-    <CommitChart></CommitChart>
+    <h1>WeeklyChart</h1>
+    <WeeklyChart></WeeklyChart>
   </div>
 </template>
 
 <script>
-  import CommitChart from './chart.vue'
+  import WeeklyChart from './weekly_chart.vue'
   export default {
     components: {
-      CommitChart
+      WeeklyChart
     }
   }
 </script>
