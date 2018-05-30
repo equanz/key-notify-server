@@ -18,7 +18,7 @@
   }
 
   /**
-   * compile to plot data from raw data
+   * compile to plot data from raw data   (caution: not implemented)
    * @param raw_data {Array} - raw data about status
    * @return {Array} return plot data
    */

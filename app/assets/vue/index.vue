@@ -12,7 +12,7 @@
   import WeeklyChart from './weekly_chart.vue'
   import YearlyChart from './yearly_chart.vue'
   export default {
-    components: {
+    components: { // add to component
       WeeklyChart,
       YearlyChart
     }
