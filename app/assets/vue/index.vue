@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <h1>My Todo App!</h1>
+    <h1>My Key-Notify App!</h1>
     <CommitChart></CommitChart>
   </div>
 </template>
 
 <script>
-  import CommitChart from './chart.js'
+  import CommitChart from './chart.vue'
+  export default {
+    components: {
+      CommitChart
+    }
+  }
 </script>
 
 <style>

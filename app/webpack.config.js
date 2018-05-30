@@ -5,8 +5,10 @@ const {VueLoaderPlugin} = require('vue-loader')
 module.exports = {
   mode: 'development',
   resolve: {
+    // set alias
     alias: {
-      'vue$': 'vue/dist/vue.common.js' // set alias
+      'vue$': 'vue/dist/vue.common.js',
+      'vue-chartjs$': 'vue-chartjs/dist/vue-chartjs.min.js'
     }
   },
   entry: path.resolve(__dirname, 'assets/js/index.js'),
