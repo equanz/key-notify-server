@@ -6,6 +6,7 @@ package sql_query
 import(
   "log"
   "os"
+  "time"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
 )
@@ -50,12 +51,16 @@ func Get_all_statistics() ([]Key_info, error){
 }
 
 /* 統計データ指定日時から最新まで抽出
- * fd: string(DATETIMEフォーマット) 取得する統計値の指定日時
+ * fd: time.Time 取得する統計値の指定日時
 */
-func Get_statistics(fd string) ([]Key_info, error){
-  rows, err := db.Query("SELECT * FROM key_info WHERE time >= ?", fd)
-  if err != nil {
-    return nil, err
+func Get_statistics(fd time.Time) ([]Key_info, error){
+  parse_time, err_parse := time.Parse("2006-01-02 15:04:05", fd.String())
+  if err_parse != nil {
+    return nil, err_parse
+  }
+  rows, err_que := db.Query("SELECT * FROM key_info WHERE time >= ? ORDER BY time DESC", parse_time)
+  if err_que != nil {
+    return nil, err_que
   }
   var info_array []Key_info
   defer rows.Close()
@@ -91,3 +96,17 @@ func Has_app_id(app_id string) (bool, error){
   }
 }
 
+/* 鍵の状態をデータベースに挿入
+ * state: string(enum("ON","OFF")) 鍵の状態
+*/
+func Insert_status(state string) (error){
+  now := time.Now()
+  jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
+  nowJST := now.In(jst)
+  time_format := nowJST.Format("2006-01-02 15:04:05")
+  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+  if err_exec != nil{
+    return err_exec
+  }
+  return nil
+}
