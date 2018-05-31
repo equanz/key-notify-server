@@ -6,6 +6,7 @@ package sql_query
 import(
   "log"
   "os"
+  "time"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
 )
