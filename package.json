@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "[![CircleCI](https://circleci.com/gh/equanz/key-notify-server/tree/master.svg?style=svg)](https://circleci.com/gh/equanz/key-notify-server/tree/master)",
   "scripts": {
+    "eslint": "eslint app/assets/",
     "build": "webpack --config app/webpack.config.prod.js",
     "build-dev": "webpack --config app/webpack.config.dev.js",
     "build-dev:watch": "webpack --config app/webpack.config.dev.js --watch",
@@ -27,5 +28,8 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
 }
