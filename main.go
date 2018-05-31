@@ -47,6 +47,8 @@ func main(){
             if send_form_message(true) == nil {
               if sql_query.Insert_status("ON") == nil {
                 c.String(200, "ON")
+              }else{
+                c.String(400, "Bad Request")
               }
             } else {
               c.String(400, "Bad Request")
@@ -55,6 +57,8 @@ func main(){
             if send_form_message(false) == nil {
               if sql_query.Insert_status("OFF") == nil {
                 c.String(200, "OFF")
+              } else {
+                c.String(400, "Bad Request")
               }
             } else {
               c.String(400, "Bad Request")
