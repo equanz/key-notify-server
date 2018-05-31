@@ -1,0 +1,18 @@
+{
+  extends: ["eslint:recommended"],
+  plugins: [],
+  env: {
+    browser: true,
+    node: true,
+    es6: true
+  },
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: "module" // allow module about
+  },
+  rules: {
+    semi: [2, "never"], // error: semi
+    no-console: 0, // allow: console
+    indent: [2, 2] // error: when indent type is not 2 spaces
+  }
+}

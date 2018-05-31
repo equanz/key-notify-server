@@ -1,0 +1,35 @@
+{
+  "name": "key-notify-server",
+  "version": "1.0.0",
+  "description": "[![CircleCI](https://circleci.com/gh/equanz/key-notify-server/tree/master.svg?style=svg)](https://circleci.com/gh/equanz/key-notify-server/tree/master)",
+  "scripts": {
+    "eslint": "eslint app/assets/",
+    "build": "webpack --config app/webpack.config.prod.js",
+    "build-dev": "webpack --config app/webpack.config.dev.js",
+    "build-dev:watch": "webpack --config app/webpack.config.dev.js --watch",
+    "heroku-postbuild": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/equanz/key-notify-server.git"
+  },
+  "author": "equanz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/equanz/key-notify-server.git/issues"
+  },
+  "homepage": "https://github.com/equanz/key-notify-server.git#readme",
+  "dependencies": {
+    "chart.js": "^2.7.2",
+    "css-loader": "^0.28.11",
+    "vue": "^2.5.16",
+    "vue-chartjs": "^3.3.1",
+    "vue-loader": "^15.2.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
+  }
+}

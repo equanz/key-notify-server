@@ -3,7 +3,7 @@ jobs:
   build:
     # Set Docker image
     docker:
-      - image: circleci/golang:1.8.5
+      - image: equanz/golang-alpine-node:1.8.5
     working_directory: /go/src/github.com/equanz/key-notify-server
 
     steps:
@@ -15,9 +15,16 @@ jobs:
           command: |
             go get -u github.com/golang/dep/cmd/dep
             dep ensure
+            npm install
+            npm run eslint
 
       # Run static code analyzer
       - run:
           name: Run static code analyzer(go vet)
           command: go vet $(go list ./... | grep -v /vendor/)
+
+      # Run eslint
+      - run:
+          name: Run ESLint (in app/assets/)
+          command: npm run eslint
 
