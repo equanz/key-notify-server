@@ -101,10 +101,10 @@ func Has_app_id(app_id string) (bool, error){
 */
 func Insert_status(state string) (error){
   now := time.Now()
-  jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+  jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
-  time_shape := nowJST.Format("2006-01-02 15:04:05")
-  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_shape, state)
+  time_format := nowJST.Format("2006-01-02 15:04:05")
+  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
   if err_exec != nil{
     return err_exec
   }
