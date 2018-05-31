@@ -91,3 +91,13 @@ func Has_app_id(app_id string) (bool, error){
   }
 }
 
+/* 鍵の状態をデータベースに挿入
+ * state: string(enum("ON","OFF")) 鍵の状態
+*/
+func Insert_status(state string){
+  now := time.Now()
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+  nowJST := now.In(jst)
+  parse_time, err = time.Parse("2006-01-02 15:04:05", nowJST)
+  _, err := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)",parse_time.String(),state)
+}
