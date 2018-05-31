@@ -7,6 +7,7 @@ import(
   "log"
   "os"
   "time"
+  "fmt"
   "database/sql"
   _ "github.com/go-sql-driver/mysql"
 )
@@ -101,13 +102,15 @@ func Has_app_id(app_id string) (bool, error){
 */
 func Insert_status(state string) (error){
   now := time.Now()
-	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+  jst := time.FixedZone("Asia/Tokyo", 9*60*60)
   nowJST := now.In(jst)
-  parse_time, err_parse := time.Parse("2006-01-02 15:04:05", nowJST.String())
+  time_shape := nowJST.Format("2006-01-02 15:04:05")
+  fmt.Println(time_shape)
+  parse_time, err_parse := time.Parse("2006-01-02 15:04:05", time_shape)
   if err_parse != nil {
     return err_parse
   }
-  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)",parse_time.String(),state)
+  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", parse_time.String(), state)
   if err_exec != nil{
     return err_exec
   }

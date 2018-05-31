@@ -45,15 +45,17 @@ func main(){
         if body.AppID != "" && has_app_id == true {
           if state == "on" {
             if send_form_message(true) == nil {
-              c.String(200, "ON")
-              sql_query.Insert_status("ON")
+              if sql_query.Insert_status("ON") == nil {
+                c.String(200, "ON")
+              }
             } else {
               c.String(400, "Bad Request")
             }
           } else if state == "off" {
             if send_form_message(false) == nil {
-              c.String(200, "OFF")
-              sql_query.Insert_status("OFF")
+              if sql_query.Insert_status("OFF") == nil {
+                c.String(200, "OFF")
+              }
             } else {
               c.String(400, "Bad Request")
             }
