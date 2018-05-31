@@ -46,12 +46,14 @@ func main(){
           if state == "on" {
             if send_form_message(true) == nil {
               c.String(200, "ON")
+              sql_query.Insert_status("ON")
             } else {
               c.String(400, "Bad Request")
             }
           } else if state == "off" {
             if send_form_message(false) == nil {
               c.String(200, "OFF")
+              sql_query.Insert_status("OFF")
             } else {
               c.String(400, "Bad Request")
             }
@@ -82,7 +84,7 @@ func main(){
           fmt.Println(err)
           c.String(400, "Bad Request")
         } else {
-          info_array, err_sql := sql_query.Get_statistics(time.String())
+          info_array, err_sql := sql_query.Get_statistics(time)
           info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
           if err_sql != nil {
             fmt.Println(err_sql)
@@ -112,4 +114,3 @@ func main(){
 
   r.Run()
 }
-
