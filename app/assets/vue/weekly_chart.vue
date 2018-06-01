@@ -54,7 +54,7 @@
       let plot_array = Array(7).fill(0) // initialize(quota(7) is amount of day)
 
       // not first data
-      if(i != 0){
+      if(i > 0){
         let before_time_date = new Date(raw_data[i - 1].Time)
         // same day
         if(before_time_date.getFullYear() == time_date.getFullYear() &&
@@ -74,7 +74,7 @@
         }
       } else{ // first data
         // not sunday
-        if(time_date.getDay() != 0){
+        if(time_date.getDay() > 0){
           // fill before day
           let background_color_before = ""
           if(raw_data[i].State == "ON"){
@@ -112,32 +112,58 @@
       })
     }
 
-    // when input week and now week is not same, fill after all
-    let plot_array = Array(7).fill(0) // initialize(quota(7) is amount of day)
-    let plot_array_now = Array(7).fill(0) // initialize(quota(7) is amount of day)
-    let now_time_date = new Date()
-    let now_time_date_sunday = new Date()
-    let last_row = raw_data[raw_data.length - 1]
-    let last_row_time_date = new Date(raw_data[raw_data.length - 1].Time)
-    let last_row_time_date_sunday = new Date(raw_data[raw_data.length - 1].Time)
+    // have action in week
+    if(raw_data.length > 0){
+      // when input week and now week is not same, fill after all
+      let plot_array = Array(7).fill(0) // initialize(quota(7) is amount of day)
+      let plot_array_now = Array(7).fill(0) // initialize(quota(7) is amount of day)
+      let now_time_date = new Date()
+      let now_time_date_sunday = new Date()
+      let last_row = raw_data[raw_data.length - 1]
+      let last_row_time_date = new Date(raw_data[raw_data.length - 1].Time)
+      let last_row_time_date_sunday = new Date(raw_data[raw_data.length - 1].Time)
 
-    // get sunday and set
-    now_time_date_sunday.setDate(now_time_date_sunday.getDate() - now_time_date_sunday.getDay())
-    last_row_time_date_sunday.setDate(last_row_time_date_sunday.getDate() - last_row_time_date_sunday.getDay())
+      // get sunday and set
+      now_time_date_sunday.setDate(now_time_date_sunday.getDate() - now_time_date_sunday.getDay())
+      last_row_time_date_sunday.setDate(last_row_time_date_sunday.getDate() - last_row_time_date_sunday.getDay())
 
-    // same week
-    if(last_row_time_date_sunday.getFullYear() == now_time_date_sunday.getFullYear() &&
-       last_row_time_date_sunday.getMonth() == now_time_date_sunday.getMonth() &&
-       last_row_time_date_sunday.getDate() == now_time_date_sunday.getDate()){
-      // same day
-      if(now_time_date.getDay() - last_row_time_date.getDay() == 0){
-        plot_array[now_time_date.getDay()] = now_time_date.getHours() - last_row_time_date.getHours()
+      // same week
+      if(last_row_time_date_sunday.getFullYear() == now_time_date_sunday.getFullYear() &&
+         last_row_time_date_sunday.getMonth() == now_time_date_sunday.getMonth() &&
+         last_row_time_date_sunday.getDate() == now_time_date_sunday.getDate()){
+        // same day
+        if(now_time_date.getDay() - last_row_time_date.getDay() == 0){
+          plot_array[now_time_date.getDay()] = now_time_date.getHours() - last_row_time_date.getHours()
 
-        plot_data.push({
-          backgroundColor: BACK_COLOR[last_row.State],
-          data: plot_array
-        })
-      } else{ // different day
+          plot_data.push({
+            backgroundColor: BACK_COLOR[last_row.State],
+            data: plot_array
+          })
+        } else{ // different day
+          plot_array[last_row_time_date.getDay()] = 24 - last_row_time_date.getHours()
+
+          plot_data.push({
+            backgroundColor: BACK_COLOR[last_row.State],
+            data: plot_array
+          })
+
+          for(let i = 0; i < now_time_date.getDay() - last_row_time_date.getDay() - 1; i++){
+            let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
+            plot_array_after[last_row_time_date.getDay() + i + 1] = 24
+
+            plot_data.push({
+              backgroundColor: BACK_COLOR[last_row.State],
+              data: plot_array_after
+            })
+          }
+          plot_array_now[now_time_date.getDay()] = now_time_date.getHours()
+
+          plot_data.push({
+            backgroundColor: BACK_COLOR[last_row.State],
+            data: plot_array_now
+          })
+        }
+      } else{ //different week
         plot_array[last_row_time_date.getDay()] = 24 - last_row_time_date.getHours()
 
         plot_data.push({
@@ -145,36 +171,23 @@
           data: plot_array
         })
 
-        for(let i = 0; i < now_time_date.getDay() - last_row_time_date.getDay() - 1; i++){
+        for(let i = 0; i < 6 - last_row_time_date.getDay(); i++){
           let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
-          plot_array_after[last_row_time_date.getDay() + i + 1] = 24
+          plot_array_after[i + last_row_time_date.getDay() + 1] = 24
 
           plot_data.push({
             backgroundColor: BACK_COLOR[last_row.State],
             data: plot_array_after
           })
         }
-        plot_array_now[now_time_date.getDay()] = now_time_date.getHours()
-
-        plot_data.push({
-          backgroundColor: BACK_COLOR[last_row.State],
-          data: plot_array_now
-        })
       }
-    } else{ //different week
-      plot_array[last_row_time_date.getDay()] = 24 - last_row_time_date.getHours()
-
-      plot_data.push({
-        backgroundColor: BACK_COLOR[last_row.State],
-        data: plot_array
-      })
-
-      for(let i = 0; i < 6 - last_row_time_date.getDay(); i++){
+    } else{ // no action in week
+      for(let i = 0; i < 7; i++){ // 7 is amount of day
         let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
         plot_array_after[i] = 24
 
         plot_data.push({
-          backgroundColor: BACK_COLOR[last_row.State],
+          backgroundColor: BACK_COLOR["OFF"], // caution: not implemented, have to check last action
           data: plot_array_after
         })
       }
