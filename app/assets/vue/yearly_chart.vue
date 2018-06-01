@@ -3,9 +3,10 @@
 
   export default {
     extends: Bar,
+    props: ['raw_data'],
     mounted() {
       this.renderChart({
-        datasets: compilePlotData(),
+        datasets: compilePlotData(this.raw_data),
       }, { // options
         tooltips: {
           enabled: false

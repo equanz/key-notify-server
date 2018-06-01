@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <h1>WeeklyChart</h1>
-    <WeeklyChart></WeeklyChart>
+    <WeeklyChart :raw_data=weekly_raw_data></WeeklyChart>
 
     <h1>YearlyChart</h1>
-    <YearlyChart></YearlyChart>
+    <YearlyChart :raw_data=weekly_raw_data></YearlyChart>
   </div>
 </template>
 
@@ -14,7 +14,13 @@
   export default {
     components: { // add to component
       WeeklyChart,
-      YearlyChart
+                  YearlyChart
+    },
+    data() {
+      return {
+        // test data
+        weekly_raw_data: [{"Time":"2018-05-28 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-05-28 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}]
+      }
     }
   }
 
