@@ -54,13 +54,10 @@ func Get_all_statistics() ([]Key_info, error){
  * fd: time.Time 取得する統計値の指定日時
 */
 func Get_statistics(fd time.Time) ([]Key_info, error){
-  parse_time, err_parse := time.Parse("2006-01-02 15:04:05", fd.String())
-  if err_parse != nil {
-    return nil, err_parse
-  }
-  rows, err_que := db.Query("SELECT * FROM key_info WHERE time >= ? ORDER BY time DESC", parse_time)
-  if err_que != nil {
-    return nil, err_que
+  form_time := fd.Format("2006-01-02 15:04:05")
+  rows, err := db.Query("SELECT * FROM key_info WHERE time >= ? ORDER BY time DESC", form_time)
+  if err != nil {
+    return nil, err
   }
   var info_array []Key_info
   defer rows.Close()

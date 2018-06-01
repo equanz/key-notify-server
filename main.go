@@ -93,6 +93,7 @@ func main(){
           info_array, err_sql := sql_query.Get_statistics(time)
           info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
           if err_sql != nil {
+            fmt.Println(fd[0])
             fmt.Println(err_sql)
             c.String(400, "Bad Request")
           } else if err_json != nil {
