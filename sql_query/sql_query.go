@@ -33,7 +33,7 @@ func init(){
 /* 統計データ全件抽出
 */
 func Get_all_statistics() ([]Key_info, error){
-  rows, err := db.Query("SELECT * FROM key_info")
+  rows, err := db.Query("SELECT * FROM key_info ORDER BY time")
   if err != nil {
     return nil, err
   }
