@@ -22,21 +22,24 @@
    * @param first_date{Date} -  get from this param
    * @return {Promise} - Promise object
    */
-  function GetGtatistics(first_date){
+  function GetStatistics(first_date){
     return new Promise(function(resolve,reject){
-      var request = new XMLHttpRequest()
+      const url = "https://key-notify-server.herokuapp.com/api/statistics"
+      let from_date = new Date(first_date.getTime())
+      let request = new XMLHttpRequest()
       // format Date
-      if(first_date.getDay() != 0){
-        first_date.setDate(first_date.getDate() - first_date.getDay())
+      if(from_date.getDay() != 0){
+        from_date.setDate(from_date.getDate() - from_date.getDay())
       }
-      var month = first_date.getMonth() + 1
+      let month = from_date.getMonth() + 1
       if(month <= 9){
         month = "0" + month
       }
-      var url = "http://localhost:8080/api/statistics?first_date=" + first_date.getFullYear() + "-" + month + "-" + first_date.getDate() + " 00:00:00"
+      let url_param = url + "?first_date=" + from_date.getFullYear() + "-" + month + "-" + from_date.getDate() + " 00:00:00"
+      console.log(url_param)
       // send request
       request.responseType = 'json'
-      request.open("GET", url)
+      request.open("GET", url_param)
       request.addEventListener("load", (event) => {
         // get server error
         if(event.target.status != 200){
@@ -52,7 +55,6 @@
       request.send()
     })
   }
-
 </script>
 
 <style>
