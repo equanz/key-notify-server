@@ -20,7 +20,7 @@
 
   /**
    * APIを用い指定した日付の週の鍵の情報を取得
-   * @param date{Date} -  get information this param week　
+   * @param date{Date} -  get information this param week
    * @return {Promise} - Promise object
    */
   function GetStatistics_Week(date){
@@ -30,11 +30,9 @@
       let by_date = new Date(date.getTime())
       let request = new XMLHttpRequest()
       // format Date
-      if(from_date.getDay() != 0){
-        from_date.setDate(from_date.getDate() - from_date.getDay())
-      }
+      from_date.setDate(from_date.getDate() - from_date.getDay())
       if(by_date.getDay() != 6){
-        by_date.setDate(by_date.getDate() (6 - from_date.getDay()))
+        by_date.setDate(by_date.getDate() + (6 - from_date.getDay()))
       }
       let from_month = from_date.getMonth() + 1
       if(from_month <= 9){
@@ -74,7 +72,7 @@
 
   /**
    * APIを用い指定した日付の年度の鍵の情報を取得
-   * @param date{Date} -  get information this param fiscal　year
+   * @param date{Date} -  get information this param fiscal year
    * @return {Promise} - Promise object
    */
   function GetStatistics_Year(date){
@@ -99,9 +97,7 @@
       }
       // set from day
       from_date.setDate(1)
-      if(from_date.getDay() != 0){
-        from_date.setDate(from_date.getDate() - from_date.getDay())
-      }
+      from_date.setDate(from_date.getDate() - from_date.getDay())
       // set by day
       by_date.setDate(31)
       if(by_date.getDay() != 6){

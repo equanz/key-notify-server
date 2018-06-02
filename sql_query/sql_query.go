@@ -57,7 +57,7 @@ func Get_all_statistics() ([]Key_info, error){
 func Get_statistics(fd time.Time,ed time.Time) ([]Key_info, error){
   first_time := fd.Format("2006-01-02 15:04:05")
   end_time := ed.Format("2006-01-02 15:04:05")
-  rows, err := db.Query("SELECT * FROM key_info WHERE time >= ? AND time <= ? ORDER BY time DESC", first_time, end_time)
+  rows, err := db.Query("SELECT * FROM key_info WHERE time >= ? AND time <= ? ORDER BY time", first_time, end_time)
   if err != nil {
     return nil, err
   }
