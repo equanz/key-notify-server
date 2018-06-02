@@ -77,29 +77,37 @@ func main(){
       }
     })
 
-    /* on/off統計データ(rawデータ)を指定日時から最新まで返す
-     * first_date: string(DATETIMEフォーマット) 取得する統計値の指定日時
+    /* on/off統計データ(rawデータ)を指定日時から指定日時まで返す
+     * first_date: string(DATETIMEフォーマット) 統計値の取得を開始する指定日時
+     * end_date: string(DATETIMEフォーマット) 統計値の取得を終わる指定日時
     */
     api.GET("/statistics", func(c *gin.Context){
       q := c.Request.URL.Query() // query params
       fd, fd_ok := q["first_date"]
+      ed, ed_ok := q["end_date"]
 
-      if fd_ok == true {
-        time, err := time.Parse("2006-01-02 15:04:05", fd[0]) // parse to format
-        if err != nil {
-          fmt.Println(err)
+      if fd_ok == true && ed_ok == true {
+        first_time, err_first := time.Parse("2006-01-02 15:04:05", fd[0]) // parse to format
+        if err_first != nil {
+          fmt.Println(err_first)
           c.String(400, "Bad Request")
         } else {
-          info_array, err_sql := sql_query.Get_statistics(time)
-          info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
-          if err_sql != nil {
-            fmt.Println(err_sql)
-            c.String(400, "Bad Request")
-          } else if err_json != nil {
-            fmt.Println(err_json)
+          end_time, err_end := time.Parse("2006-01-02 15:04:05", ed[0]) // parse to format
+          if err_end != nil {
+            fmt.Println(err_end)
             c.String(400, "Bad Request")
           } else {
-            c.String(200, string(info_array_json)) // stringify and response
+            info_array, err_sql := sql_query.Get_statistics(first_time, end_time)
+            info_array_json, err_json := json.Marshal(info_array) // generate json bytes from struct
+            if err_sql != nil {
+              fmt.Println(err_sql)
+              c.String(400, "Bad Request")
+            } else if err_json != nil {
+              fmt.Println(err_json)
+              c.String(400, "Bad Request")
+            } else {
+              c.String(200, string(info_array_json)) // stringify and response
+            }
           }
         }
       } else {
@@ -114,6 +122,52 @@ func main(){
         } else {
           c.String(200, string(info_array_json)) // stringify and response
         }
+      }
+    })
+
+    /* on/off統計データ(rawデータ)の最新1件を返す
+    */
+    api.GET("/statistic",func(c *gin.Context){
+      info_array, err_sql := sql_query.Get_latest_state()
+      info_array_json, err_json := json.Marshal(info_array)
+      if err_sql != nil {
+        fmt.Println(err_sql)
+        c.String(400, "Bad Request")
+      } else if err_json != nil {
+        fmt.Println(err_json)
+        c.String(400, "Bad Request")
+      } else {
+        c.String(200, string(info_array_json))
+      }
+    })
+
+    /* on/off統計データ(rawデータ)の指定された日時より早いデータを1件返す
+     * date: string(DATETIMEフォーマット) 取得する値の指定日時
+    */
+    api.GET("/before_statistic",func(c *gin.Context){
+      q := c.Request.URL.Query() // query params
+      fd, fd_ok := q["date"]
+
+      if fd_ok == true {
+        time, err := time.Parse("2006-01-02 15:04:05", fd[0]) // parse to format
+        if err != nil {
+          fmt.Println(err)
+          c.String(400, "Bad Request")
+        } else {
+          info_array, err_sql := sql_query.Get_before_state(time)
+          info_array_json, err_json := json.Marshal(info_array)
+          if err_sql != nil {
+            fmt.Println(err_sql)
+            c.String(400, "Bad Request")
+          } else if err_json != nil {
+            fmt.Println(err_json)
+            c.String(400, "Bad Request")
+          } else {
+            c.String(200, string(info_array_json))
+          }
+        }
+      } else {
+        c.String(400, "Bad Request")
       }
     })
   }
