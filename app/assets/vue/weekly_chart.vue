@@ -64,7 +64,7 @@
         } else{ // different day
           plot_value = time_date.getHours()
 
-          // push status to end of before day
+          // fill by last status to before day
           let plot_array_before = Array(7).fill(0) // initialize(quota(7) is amount of day)
           plot_array_before[before_time_date.getDay()] = 24 - before_time_date.getHours()
           plot_data.push({
@@ -114,7 +114,7 @@
 
     // have action in week
     if(raw_data.length > 0){
-      // when input week and now week is not same, fill after all
+      // when input week and now week is not same, fill by last status
       let plot_array = Array(7).fill(0) // initialize(quota(7) is amount of day)
       let plot_array_now = Array(7).fill(0) // initialize(quota(7) is amount of day)
       let now_time_date = new Date()

@@ -67,6 +67,10 @@
                 off_time_date = new Date()
               } else{ // not now year
                 off_time_date = new Date(time_date.getFullYear(), 2, 31, 23, 59, 59, 999) // 3/31 23:59:59;999
+                // not saturday
+                if(off_time_date.getDay() != 6){
+                  off_time_date.setDate(off_time_date.getDate() - off_time_date.getDay() - 1) // last day in fiscal year
+                }
                 raw_data.push(off_time_date)
               }
             }
