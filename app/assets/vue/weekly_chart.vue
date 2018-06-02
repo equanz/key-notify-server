@@ -3,11 +3,11 @@
 
   export default {
     extends: HorizontalBar,
-    props: ['raw_data'],
+    props: ['raw_data', 'last_week_state'],
     mounted() {
       this.renderChart({
         labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // day label
-        datasets: compilePlotData(this.raw_data),
+        datasets: compilePlotData(this.raw_data, this.last_week_state),
       }, { // options
         scales: {
           xAxes: [{
@@ -32,11 +32,12 @@
   }
 
   /**
-   * compile to plot data from raw data   (caution: not implemented)
+   * compile to plot data from raw data
    * @param raw_data {Array} - raw data about status
+   * @param last_week_state {String} - last week state
    * @return {Array} return plot data
    */
-  let compilePlotData = (raw_data) => {
+  let compilePlotData = (raw_data, last_week_state) => {
     // property
     let plot_data = [] //initialize
 
@@ -187,7 +188,7 @@
         plot_array_after[i] = 24
 
         plot_data.push({
-          backgroundColor: BACK_COLOR["OFF"], // caution: not implemented, have to check last action
+          backgroundColor: BACK_COLOR[last_week_state],
           data: plot_array_after
         })
       }

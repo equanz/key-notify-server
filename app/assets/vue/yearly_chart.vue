@@ -20,7 +20,7 @@
   }
 
   /**
-   * compile to plot data from raw data   (caution: not implemented)
+   * compile to plot data from raw data
    * @param raw_data {Array} - raw data about status
    * @param fiscal_year {Number} - fiscal year by raw_data
    * @return {Array} return plot data
