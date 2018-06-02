@@ -21,12 +21,12 @@
             stacked: true
           }]
         },
-           tooltips: {
-             enabled: false // hide tooltips
-           },
-           legend: {
-             display: false // hide legend
-           }
+        tooltips: {
+          enabled: false // hide tooltips
+        },
+        legend: {
+          display: false // hide legend
+        }
       })
     }
   }
