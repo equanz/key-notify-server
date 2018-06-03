@@ -3,7 +3,7 @@ const path = require('path')
 const {VueLoaderPlugin} = require('vue-loader')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   resolve: {
     // set alias
     alias: {
@@ -31,6 +31,15 @@ module.exports = {
         use: [
           'vue-style-loader',
           'css-loader'
+        ]
+      },
+      {
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'less-loader'
         ]
       }
     ]
