@@ -143,7 +143,7 @@ func Insert_status(state string) (error){
   jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
   time_format := nowJST.Format("2006-01-02 15:04:05")
-  before_array, err_array := Get_latest_state() //get bsfore state
+  before_array, err_array := Get_latest_state() //get before state
 
   if err_array == nil {
     if state != before_array[0].State {
