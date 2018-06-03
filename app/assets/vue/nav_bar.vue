@@ -14,8 +14,10 @@
 
   nav{
     display: flex;
+    position: fixed;
+    z-index: 999;
     width: 100vw;
-    height: 7vh;
+    height: @nav-height;
     background-color: @nav-color;
     align-items: center;
   }
