@@ -8,7 +8,8 @@
       this.renderChart({
         labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // day label
         datasets: compilePlotData(this.raw_data, this.last_week_state),
-      }, { // options
+      },
+      { // options
         scales: {
           xAxes: [{
             stacked: true,
@@ -43,8 +44,8 @@
 
     // const
     const BACK_COLOR = {
-      ON: '#f87979',
-      OFF: '#333333'
+      ON: '#F87979',
+      OFF: '#7F8C8D'
     }
 
 
