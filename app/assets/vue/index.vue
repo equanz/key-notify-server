@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>WeeklyChart</h1>
-    <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_state></WeeklyChart>
+    <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_data.State></WeeklyChart>
 
     <h1>YearlyChart</h1>
     <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year></YearlyChart>
@@ -12,15 +12,16 @@
   import WeeklyChart from './weekly_chart.vue'
   import YearlyChart from './yearly_chart.vue'
   export default {
-    components: { // add to component
-      WeeklyChart,
-      YearlyChart
+    components:
+    { // add to local component
+      WeeklyChart: WeeklyChart,
+      YearlyChart: WeeklyChart
     },
-    data() {
+    data(){
       return {
         // test data
         weekly_raw_data: [{"Time":"2018-05-28 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-05-28 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
-        last_week_state: "ON",
+        last_week_data: {"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9},
         yearly_raw_data: [{"Time":"2018-04-25 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-04-25 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
         fiscal_year: 2018
       }
@@ -144,8 +145,18 @@
   }
 </script>
 
-<style>
-  h1 {
+<style lang="less">
+  @import "../less/main.less";
+  @import url(//fonts.googleapis.com/earlyaccess/notosansjp.css);
+
+  body{
+    margin: 0;
+    color: @text-black-color;
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: @back-color;
+  }
+
+  h1{
     text-align: center;
   }
 </style>
