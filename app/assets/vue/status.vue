@@ -1,10 +1,10 @@
 <template>
-  <article>
+  <section>
     <p>{{room_name}}</p>
     <figure v-if="status=='ON'" id="status-on"></figure>
     <figure v-else id="status-off"></figure>
     <p>from {{from_time}}</p>
-  </article>
+  </section>
 </template>
 
 <script>
@@ -16,11 +16,15 @@
 <style lang="less" scoped>
   @import "../less/main.less";
 
-  article{
+  section{
+    display: flex;
     background-color: @article-back-color;
     width: 35vw;
     height: 15rem;
     text-align: center;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
   }
 
   p{

@@ -18,18 +18,22 @@
 
   section{
     background-color: @article-back-color;
-    width: 35vw;
+    width: 45vw;
     height: auto;
   }
 
   h1{
+    margin: 0;
+    margin-bottom: 10px;
     background-color: @title-back-color;
   }
 
   p{
     margin: 0;
     margin-left: 1vw;
-    font-size: 1.5rem;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1rem;
   }
 </style>
 

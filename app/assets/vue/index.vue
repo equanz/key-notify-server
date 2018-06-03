@@ -1,8 +1,10 @@
-<template>
-  <div id="app">
-    <Status :room_name=room_name :from_time=from_time :status=room_status></Status>
+<template id="app">
+  <article id="app">
+    <div id="status">
+      <Status :room_name=room_name :from_time=from_time :status=room_status></Status>
+    </div>
 
-    <article>
+    <div id="contents">
       <Section :section_name=section_name.weekly>
         <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_data.State></WeeklyChart>
       </Section>
@@ -10,8 +12,8 @@
       <Section :section_name=section_name.yearly>
         <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year></YearlyChart>
       </Section>
-    </article>
-  </div>
+    </div>
+  </article>
 </template>
 
 <script>
@@ -58,11 +60,18 @@
     background-color: @back-color;
   }
 
-  div#app{
-    padding-top: @nav-height;
+  article#app{
+    padding-top: @nav-height + 5;
   }
 
-  article{
+  div#status{
     display: flex;
+    justify-content: center;
+  }
+
+  div#contents{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
   }
 </style>
