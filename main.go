@@ -41,56 +41,27 @@ func main(){
       state := c.Param("status")
 
       has_app_id, err := sql_query.Has_app_id(body.AppID) // search app_id
-      before_array, err_array := sql_query.Get_latest_state() //get bsfore state
+
       if err == nil {
-        if err_array == nil {
-          if body.AppID != "" && has_app_id == true {
-            if state == "on" {
-              if send_form_message(true) == nil {
-                if before_array[0].State != "ON" {
-                  if sql_query.Insert_status("ON") == nil {
-                    c.String(200, "ON")
-                  } else {
-                    c.String(400, "Bad Request")
-                  }
-                } else {
-                  if sql_query.Insert_status("OFF") == nil {
-                    if sql_query.Insert_status("ON") == nil {
-                      c.String(200, "ON")
-                    } else {
-                      c.String(400, "Bad Request")
-                    }
-                  } else {
-                    c.String(400, "Bad Request")
-                  }
-                }
-              } else {
-                c.String(400, "Bad Request")
-              }
-            } else if state == "off" {
-              if send_form_message(false) == nil {
-                if before_array[0].State != "OFF" {
-                  if sql_query.Insert_status("OFF") == nil {
-                    c.String(200, "OFF")
-                  } else {
-                    c.String(400, "Bad Request")
-                  }
-                } else {
-                  if sql_query.Insert_status("ON") == nil {
-                    if sql_query.Insert_status("OFF") == nil {
-                      c.String(200, "OFF")
-                    } else {
-                      c.String(400, "Bad Request")
-                    }
-                  } else {
-                    c.String(400, "Bad Request")
-                  }
-                }
+        if body.AppID != "" && has_app_id == true {
+          if state == "on" {
+            if send_form_message(true) == nil {
+              if sql_query.Insert_status("ON") == nil {
+                c.String(200, "ON")
               } else {
                 c.String(400, "Bad Request")
               }
             } else {
-              // error
+              c.String(400, "Bad Request")
+            }
+          } else if state == "off" {
+            if send_form_message(false) == nil {
+              if sql_query.Insert_status("OFF") == nil {
+                c.String(200, "OFF")
+              } else {
+                c.String(400, "Bad Request")
+              }
+            } else {
               c.String(400, "Bad Request")
             }
           } else {
@@ -98,7 +69,8 @@ func main(){
             c.String(400, "Bad Request")
           }
         } else {
-          c.String(503, "Service Unavailable")
+          // error
+          c.String(400, "Bad Request")
         }
       } else {
         // error

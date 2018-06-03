@@ -143,9 +143,48 @@ func Insert_status(state string) (error){
   jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
   time_format := nowJST.Format("2006-01-02 15:04:05")
-  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
-  if err_exec != nil{
-    return err_exec
+  before_array, err_array := Get_latest_state() //get bsfore state
+
+  if err_array == nil {
+    if state != before_array[0].State {
+      // different latest state
+      _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+      if err_exec == nil {
+        return nil
+      } else {
+        return err_exec
+      }
+    } else {
+      // same state
+      if state == "ON" {
+        // state ON
+        _, err_exec_fitst := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
+        if err_exec_fitst == nil {
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          if err_exec_second == nil {
+            return nil
+          } else {
+            return err_exec_second
+          }
+        } else {
+          return err_exec_fitst
+        }
+      } else {
+        // state OFF
+        _, err_exec_fitst := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
+        if err_exec_fitst == nil {
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          if err_exec_second == nil {
+            return nil
+          } else {
+            return err_exec_second
+          }
+        } else {
+          return err_exec_fitst
+        }
+      }
+    }
+  } else {
+    return err_array
   }
-  return nil
 }
