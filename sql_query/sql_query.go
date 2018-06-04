@@ -144,7 +144,7 @@ func Insert_status(state string) (error){
   now := time.Now()
   jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
-  second_time := nowJST.Add(1 * time.Second)
+  second_time := nowJST.Add(time.Second)
   time_format := nowJST.Format("2006-01-02 15:04:05")
   second_time_format := second_time.Format("2006-01-02 15:04:05")
   before, err_array := Get_latest_state() //get before state
