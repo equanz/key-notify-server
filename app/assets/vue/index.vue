@@ -30,21 +30,64 @@
       Status: Status,
       Section: Section
     },
-    data(){
+    data() {
       return {
         // test data
-        weekly_raw_data: [{"Time":"2018-05-28 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-05-28 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
+        weekly_raw_data: [],
         last_week_data: {"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9},
-        yearly_raw_data: [{"Time":"2018-04-25 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-04-25 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
-        fiscal_year: 2018,
+        yearly_raw_data: [],
+        fiscal_year: 0,
         room_name: "Server Room",
-        from_time: "14:30",
-        room_status: "ON",
+        from_time: "",
+        room_status: "",
         section_name: {
           weekly: 'Weekly Status',
           yearly: 'Yearly Status'
         }
       }
+    },
+    methods: {
+      updateWeekly: function(date) {
+        APIGet.GetStatistics_Week(date).then((res) => {
+          // update raw_data
+          this.weekly_raw_data = res
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateYearly: function(date) {
+        APIGet.GetStatistics_Year(date).then((res) => {
+          // update fiscal year
+          this.fiscal_year = this.calcFiscalYear(date)
+          // update raw_data
+          this.yearly_raw_data = res
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateLast: function(date) {
+        APIGet.GetStatistics_Last().then((res) => {
+          let last_date = new Date(res.Time)
+          // update last data
+          this.room_status = res.State
+          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMunites()}`
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      calcFiscalYear: function(date) { // calculate fiscal year
+        // Jan-Mar
+        if(date.getMonth() < 3){
+          return date.getFullYear() - 1
+        } else{
+          return date.getFullYear()
+        }
+      }
+    },
+    created() {
+      let now = new Date() // test
+      this.updateWeekly(now)
+      this.updateYearly(now)
     }
   }
 </script>

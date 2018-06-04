@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from '../vue/index.vue'
 import NavBar from '../vue/nav_bar.vue'
+import Footer from '../vue/footer.vue'
 
 Vue.config.productionTip = false
 
@@ -21,6 +22,16 @@ new Vue({
   components:
   {
     App: App
+  }
+})
+
+// footer
+new Vue({
+  el: '#footer',
+  template: '<Footer/>',
+  components:
+  {
+    Footer: Footer
   }
 })
 

@@ -1,17 +1,18 @@
 // package config
 export default {
   GetStatistics_Week: GetStatistics_Week,
-  GetStatistics_Year: GetStatistics_Year
+  GetStatistics_Year: GetStatistics_Year,
+  GetStatistics_Last: GetStatistics_Last
 }
 
 /**
  * APIを用い指定した日付の週の鍵の情報を取得
- * @param date{Date} -  get information this param week
+ * @param date {Date} -  get information this param week
  * @return {Promise} - Promise object
  */
 function GetStatistics_Week(date){
   return new Promise(function(resolve, reject){
-    const url = "https://key-notify-server.herokuapp.com/api/statistics"
+    const url = `${location.protocol}//${location.host}/api/statistics`
     let from_date = new Date(date.getTime())
     let by_date = new Date(date.getTime())
     let request = new XMLHttpRequest()
@@ -58,12 +59,12 @@ function GetStatistics_Week(date){
 
 /**
  * APIを用い指定した日付の年度の鍵の情報を取得
- * @param date{Date} -  get information this param fiscal year
+ * @param date {Date} -  get information this param fiscal year
  * @return {Promise} - Promise object
  */
 function GetStatistics_Year(date){
   return new Promise(function(resolve, reject){
-    const url = "https://key-notify-server.herokuapp.com/api/statistics"
+    const url = `${location.protocol}//${location.host}/api/statistics`
     let from_date = new Date(date.getTime())
     let by_date = new Date(date.getTime())
     let request = new XMLHttpRequest()
@@ -119,3 +120,32 @@ function GetStatistics_Year(date){
     request.send()
   })
 }
+
+/**
+ * APIを用いて最新の鍵の情報を取得
+ * @return {Promise} - Promise object
+ */
+function GetStatistics_Last() {
+  return new Promise((resolve, reject) => {
+    const url = `${location.protocol}//${location.host}/api/statistic`
+    let request = new XMLHttpRequest()
+
+    // send request
+    request.responseType = 'json'
+    request.open("GET", url)
+    request.addEventListener("load", (event) => {
+      // get server error
+      if(event.target.status != 200){
+        reject()
+      } else {
+        resolve(event.target.response)
+      }
+    })
+    // get connect error
+    request.addEventListener("error", () => {
+      reject()
+    })
+    request.send()
+  })
+}
+
