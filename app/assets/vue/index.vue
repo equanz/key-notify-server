@@ -6,11 +6,11 @@
 
     <div id="contents">
       <Section :section_name=section_name.weekly>
-        <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_data.State></WeeklyChart>
+        <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_data.State :select_date=select_date.weekly></WeeklyChart>
       </Section>
 
       <Section :section_name=section_name.yearly>
-        <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year></YearlyChart>
+        <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year :select_date=select_date.yearly></YearlyChart>
       </Section>
     </div>
   </article>
@@ -42,6 +42,10 @@
         section_name: {
           weekly: 'Weekly Status',
           yearly: 'Yearly Status'
+        },
+        select_date: {
+          weekly: '',
+          yearly: '',
         }
       }
     },
@@ -49,7 +53,12 @@
       updateWeekly: function(date) {
         APIGet.GetStatistics_Week(date).then((res) => {
           // update raw_data
-          this.weekly_raw_data = res
+          // not in res
+          if(! res){
+            this.weekly_raw_data = []
+          } else{ // in res
+            this.weekly_raw_data = res
+          }
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -59,7 +68,12 @@
           // update fiscal year
           this.fiscal_year = this.calcFiscalYear(date)
           // update raw_data
-          this.yearly_raw_data = res
+          // not in res
+          if(! res){
+            this.yearly_raw_data = []
+          } else{ // in res
+            this.yearly_raw_data = res
+          }
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -93,6 +107,8 @@
     },
     created() {
       let now = new Date() // last week, year only
+      this.select_date.weekly = now
+      this.select_date.yearly = now
       this.updateWeekly(now)
       this.updateYearly(now)
       this.updateLast()
@@ -113,7 +129,7 @@
   }
 
   article#app{
-    padding-top: @nav-height + 5;
+    padding-top: @nav-height + 20px;
   }
 
   div#status{

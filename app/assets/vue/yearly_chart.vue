@@ -4,7 +4,7 @@
   export default {
     extends: Bar,
     mixins: [mixins.reactiveData],
-    props: ['raw_data', 'fiscal_year'],
+    props: ['raw_data', 'fiscal_year', 'select_date'],
     data() {
       return {
         options: { // options
@@ -206,7 +206,7 @@
       getWeekVal: function(year) {
         // const
         const LEAP_WEEK = 53
-        const NORMAL_WEEK = 53
+        const NORMAL_WEEK = 52
         const LAST_DAY_FISCAL_YEAR = new Date(year + 1, 2, 31)
         if(this.isLeapYear(year) == true){
           // sunday

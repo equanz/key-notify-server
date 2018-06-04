@@ -4,7 +4,7 @@
   export default {
     extends: HorizontalBar,
     mixins: [mixins.reactiveData],
-    props: ['raw_data', 'last_week_state'],
+    props: ['raw_data', 'last_week_state', 'select_date'],
     data() {
       return { // options
         options: {
@@ -199,15 +199,46 @@
             }
           }
         } else{ // no action in week
-          for(let i = 0; i < 7; i++){ // 7 is amount of day
-            let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
-            plot_array_after[i] = 24
+          let now_time_date = new Date()
+          let now_time_date_sunday = new Date()
+          let select_date_sunday = new Date(this.select_date.getTime())
 
-            plot_data.push({
-              backgroundColor: BACK_COLOR[last_week_state],
-              data: plot_array_after
-            })
+          // get sunday and set
+          now_time_date_sunday.setDate(now_time_date_sunday.getDate() - now_time_date_sunday.getDay())
+          select_date_sunday.setDate(select_date_sunday.getDate() - select_date_sunday.getDay())
+
+          // same week
+          if(select_date_sunday.getFullYear() == now_time_date_sunday.getFullYear() &&
+             select_date_sunday.getMonth() == now_time_date_sunday.getMonth() &&
+             select_date_sunday.getDate() == now_time_date_sunday.getDate()){
+            for(let i = 0; i < 7; i++){ // 7 is amount of day
+              let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
+              // different day
+              if(i < now_time_date.getDay()){
+                plot_array_after[i] = 24
+              } else if(i == now_time_date.getDay()){ // same day
+                plot_array_after[i] = now_time_date.getHours()
+              } else{ // future day
+                plot_array_after[i] = 0
+              }
+
+              plot_data.push({
+                backgroundColor: BACK_COLOR[last_week_state],
+                data: plot_array_after
+              })
+            }
+          } else{ // different week
+            for(let i = 0; i < 7; i++){ // 7 is amount of day
+              let plot_array_after = Array(7).fill(0) // initialize(quota(7) is amount of day)
+              plot_array_after[i] = 24
+
+              plot_data.push({
+                backgroundColor: BACK_COLOR[last_week_state],
+                data: plot_array_after
+              })
+            }
           }
+
         }
 
         return plot_data
