@@ -67,10 +67,11 @@
       },
       updateLast: function(date) {
         APIGet.GetStatistics_Last().then((res) => {
+          console.log(res)
           let last_date = new Date(res.Time)
           // update last data
           this.room_status = res.State
-          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMunites()}`
+          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMinutes()}`
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -88,6 +89,7 @@
       let now = new Date() // test
       this.updateWeekly(now)
       this.updateYearly(now)
+      this.updateLast(now)
     }
   }
 </script>
