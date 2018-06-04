@@ -19,12 +19,24 @@
   section{
     display: flex;
     background-color: @article-back-color;
-    width: 35vw;
     height: 15rem;
+    width: @content-small-size;
     text-align: center;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+
+    .screen-sm({
+      width: 50vw;
+    });
+
+    .screen-md({
+      width: 35vw;
+    });
+
+    .screen-lg({
+      width: 35vw;
+    });
   }
 
   p{
