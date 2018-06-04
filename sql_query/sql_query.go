@@ -144,7 +144,9 @@ func Insert_status(state string) (error){
   now := time.Now()
   jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
+  second_time := nowJST.Add(1 * time.Second)
   time_format := nowJST.Format("2006-01-02 15:04:05")
+  second_time_format := second_time.Format("2006-01-02 15:04:05")
   before, err_array := Get_latest_state() //get before state
 
   if err_array == nil {
@@ -162,7 +164,7 @@ func Insert_status(state string) (error){
         // state ON
         _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
         if err_exec_first == nil {
-          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", second_time_format, state)
           if err_exec_second == nil {
             return nil
           } else {
@@ -175,7 +177,7 @@ func Insert_status(state string) (error){
         // state OFF
         _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
         if err_exec_first == nil {
-          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", second_time_format, state)
           if err_exec_second == nil {
             return nil
           } else {
