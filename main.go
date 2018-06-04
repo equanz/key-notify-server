@@ -29,6 +29,9 @@ func main(){
   // file access
   r.StaticFS("/app", http.Dir("app"))
 
+  // favicon access
+  r.StaticFile("/favicon.ico", "./resources/favicon.ico")
+
   // '/api' group
   api := r.Group("/api")
   {
