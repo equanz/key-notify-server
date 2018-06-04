@@ -1,151 +1,129 @@
-<template>
-  <div id="app">
-    <h1>WeeklyChart</h1>
-    <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_state></WeeklyChart>
+<template id="app">
+  <article id="app">
+    <div id="status">
+      <Status :room_name=room_name :from_time=from_time :status=room_status></Status>
+    </div>
 
-    <h1>YearlyChart</h1>
-    <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year></YearlyChart>
-  </div>
+    <div id="contents">
+      <Section :section_name=section_name.weekly>
+        <WeeklyChart :raw_data=weekly_raw_data :last_week_state=last_week_data.State></WeeklyChart>
+      </Section>
+
+      <Section :section_name=section_name.yearly>
+        <YearlyChart :raw_data=yearly_raw_data :fiscal_year=fiscal_year></YearlyChart>
+      </Section>
+    </div>
+  </article>
 </template>
 
 <script>
   import WeeklyChart from './weekly_chart.vue'
   import YearlyChart from './yearly_chart.vue'
+  import Status from './status.vue'
+  import Section from './section.vue'
+  import APIGet from '../js/api_get.js'
   export default {
-    components: { // add to component
-      WeeklyChart,
-      YearlyChart
+    components:
+    { // add to local component
+      WeeklyChart: WeeklyChart,
+      YearlyChart: YearlyChart,
+      Status: Status,
+      Section: Section
     },
     data() {
       return {
-        // test data
-        weekly_raw_data: [{"Time":"2018-05-28 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-05-28 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
-        last_week_state: "ON",
-        yearly_raw_data: [{"Time":"2018-04-25 15:52:56","State":"ON","Key_info_id":1},{"Time":"2018-04-25 17:43:55","State":"OFF","Key_info_id":2},{"Time":"2018-05-29 15:52:56","State":"ON","Key_info_id":3},{"Time":"2018-05-29 17:43:55","State":"OFF","Key_info_id":4},{"Time":"2018-05-30 15:52:56","State":"ON","Key_info_id":5},{"Time":"2018-05-30 17:43:55","State":"OFF","Key_info_id":6},{"Time":"2018-05-31 15:52:56","State":"ON","Key_info_id":7},{"Time":"2018-05-31 17:43:55","State":"OFF","Key_info_id":8},{"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9}],
-        fiscal_year: 2018
+        weekly_raw_data: [],
+        last_week_data: {},
+        yearly_raw_data: [],
+        fiscal_year: 0,
+        room_name: "Server Room",
+        from_time: "",
+        room_status: "",
+        section_name: {
+          weekly: 'Weekly Status',
+          yearly: 'Yearly Status'
+        }
       }
+    },
+    methods: {
+      updateWeekly: function(date) {
+        APIGet.GetStatistics_Week(date).then((res) => {
+          // update raw_data
+          this.weekly_raw_data = res
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateYearly: function(date) {
+        APIGet.GetStatistics_Year(date).then((res) => {
+          // update fiscal year
+          this.fiscal_year = this.calcFiscalYear(date)
+          // update raw_data
+          this.yearly_raw_data = res
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateLast: function() {
+        APIGet.GetStatistics_Last().then((res) => {
+          let last_date = new Date(res.Time)
+          // update last data
+          this.room_status = res.State
+          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMinutes()}`
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateLastWeek: function(date) {
+        APIGet.GetStatistics_Before(date).then((res) => {
+          // update last week data
+          this.last_week_data = res
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      calcFiscalYear: function(date) { // calculate fiscal year
+        // Jan-Mar
+        if(date.getMonth() < 3){
+          return date.getFullYear() - 1
+        } else{
+          return date.getFullYear()
+        }
+      }
+    },
+    created() {
+      let now = new Date() // last week, year only
+      this.updateWeekly(now)
+      this.updateYearly(now)
+      this.updateLast()
+      this.updateLastWeek(now)
     }
-  }
-
-  /**
-   * APIを用い指定した日付の週の鍵の情報を取得
-   * @param date{Date} -  get information this param week
-   * @return {Promise} - Promise object
-   */
-  function GetStatistics_Week(date){
-    return new Promise(function(resolve, reject){
-      const url = "https://key-notify-server.herokuapp.com/api/statistics"
-      let from_date = new Date(date.getTime())
-      let by_date = new Date(date.getTime())
-      let request = new XMLHttpRequest()
-      // format Date
-      from_date.setDate(from_date.getDate() - from_date.getDay())
-      if(by_date.getDay() != 6){
-        by_date.setDate(by_date.getDate() + (6 - from_date.getDay()))
-      }
-      let from_month = from_date.getMonth() + 1
-      if(from_month <= 9){
-        from_month = "0" + from_month
-      }
-      let by_month = by_date.getMonth() + 1
-      if(by_month <= 9){
-        by_month = "0" + by_month
-      }
-      let from_day = from_date.getDate()
-      if(from_day <= 9){
-        from_day = "0" + from_day
-      }
-      let by_day = by_date.getDate()
-      if(by_day <= 9){
-        by_day = "0" + by_day
-      }
-      let url_param = url + "?first_date=" + from_date.getFullYear() + "-" + from_month + "-" + from_day + " 00:00:00&end_date=" + by_date.getFullYear() + "-" + by_month + "-" + by_day + " 23:59:59"
-      // send request
-      request.responseType = 'json'
-      request.open("GET", url_param)
-      request.addEventListener("load", (event) => {
-        // get server error
-        if(event.target.status != 200){
-          reject()
-        } else {
-          resolve(event.target.response)
-        }
-      })
-      // get connect error
-      request.addEventListener("error", () => {
-        reject()
-      })
-      request.send()
-    })
-  }
-
-  /**
-   * APIを用い指定した日付の年度の鍵の情報を取得
-   * @param date{Date} -  get information this param fiscal year
-   * @return {Promise} - Promise object
-   */
-  function GetStatistics_Year(date){
-    return new Promise(function(resolve, reject){
-      const url = "https://key-notify-server.herokuapp.com/api/statistics"
-      let from_date = new Date(date.getTime())
-      let by_date = new Date(date.getTime())
-      let request = new XMLHttpRequest()
-      // form from month
-      if(from_date.getMonth() > 3){
-        from_date.setMonth(from_date.getMonth() - (from_date.getMonth() - 3))
-      } else if (from_date.getMonth() < 3) {
-        from_date.setMonth(from_date.getMonth() + (3 - from_date.getMonth()))
-        from_date.setYear(from_date.getFullYear() - 1)
-      }
-      // form by month
-      if(by_date.getMonth() > 2){
-        by_date.setMonth(by_date.getMonth() - (by_date.getMonth() - 2))
-        by_date.setYear(by_date.getFullYear() + 1)
-      } else if (by_date.getMonth() < 2) {
-        by_date.setMonth(by_date.getMonth() + (2 - by_date.getMonth()))
-      }
-      // set from day
-      from_date.setDate(1)
-      from_date.setDate(from_date.getDate() - from_date.getDay())
-      // set by day
-      by_date.setDate(31)
-      if(by_date.getDay() != 6){
-        by_date.setDate(by_date.getDate() - (by_date.getDay() + 1))
-      }
-      // form url
-      let from_month = from_date.getMonth() + 1
-      let by_month = by_date.getMonth() + 1
-      let from_day = from_date.getDate()
-      if(from_day <= 9){
-        from_day = "0" + from_day
-      }
-      let by_day = by_date.getDate()
-      if(by_day <= 9){
-        by_day = "0" + by_day
-      }
-      let url_param = url + "?first_date=" + from_date.getFullYear() + "-0" + from_month + "-" + from_day + " 00:00:00&end_date=" + by_date.getFullYear() + "-0" + by_month + "-" + by_day + " 23:59:59"
-      // send request
-      request.responseType = 'json'
-      request.open("GET", url_param)
-      request.addEventListener("load", (event) => {
-        // get server error
-        if(event.target.status != 200){
-          reject()
-        } else {
-          resolve(event.target.response)
-        }
-      })
-      // get connect error
-      request.addEventListener("error", () => {
-        reject()
-      })
-      request.send()
-    })
   }
 </script>
 
-<style>
-  h1 {
-    text-align: center;
+<style lang="less">
+  @import "../less/main.less";
+  @import url(//fonts.googleapis.com/earlyaccess/notosansjp.css);
+
+  body{
+    margin: 0;
+    color: @text-black-color;
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: @back-color;
+  }
+
+  article#app{
+    padding-top: @nav-height + 5;
+  }
+
+  div#status{
+    display: flex;
+    justify-content: center;
+  }
+
+  div#contents{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
   }
 </style>
