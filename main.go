@@ -29,6 +29,9 @@ func main(){
   // file access
   r.StaticFS("/app", http.Dir("app"))
 
+  // favicon access
+  r.StaticFile("/favicon.ico", "./resources/favicon.ico")
+
   // '/api' group
   api := r.Group("/api")
   {
@@ -41,6 +44,7 @@ func main(){
       state := c.Param("status")
 
       has_app_id, err := sql_query.Has_app_id(body.AppID) // search app_id
+
       if err == nil {
         if body.AppID != "" && has_app_id == true {
           if state == "on" {

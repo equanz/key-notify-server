@@ -75,42 +75,44 @@ func Get_statistics(fd time.Time,ed time.Time) ([]Key_info, error){
 
 /* 最新データ一件を抽出
 */
-func Get_latest_state() ([]Key_info, error){
+func Get_latest_state() (Key_info, error){
+  nil_key := Key_info{}
   rows, err := db.Query("SELECT * FROM key_info ORDER BY time DESC LIMIT 1")
   if err != nil {
-    return nil , err
+    return nil_key, err
   }
   var info_array []Key_info
   defer rows.Close()
   for rows.Next() {
     var info Key_info
     if err := rows.Scan(&info.Time, &info.State, &info.Key_info_id); err != nil {
-      return nil, err
+      return nil_key, err
     }
     info_array = append(info_array, info)
   }
-  return info_array, nil
+  return info_array[0], nil
 }
 
 /* 指定した日時の一つ前のデータを抽出
  * fd: time.Time 取得する値の指定日時
 */
-func Get_before_state(fd time.Time) ([]Key_info, error){
+func Get_before_state(fd time.Time) (Key_info, error){
+  nil_key := Key_info{}
   form_time := fd.Format("2006-01-02 15:04:05")
   rows, err := db.Query("SELECT * FROM key_info WHERE time <= ? ORDER BY time DESC LIMIT 1", form_time)
   if err != nil {
-    return nil , err
+    return nil_key, err
   }
   var info_array []Key_info
   defer rows.Close()
   for rows.Next() {
     var info Key_info
     if err := rows.Scan(&info.Time, &info.State, &info.Key_info_id); err != nil {
-      return nil, err
+      return nil_key, err
     }
     info_array = append(info_array, info)
   }
-  return info_array, nil
+  return info_array[0], nil
 }
 
 /* app_idがDBに格納されていれば真
@@ -143,9 +145,48 @@ func Insert_status(state string) (error){
   jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
   nowJST := now.In(jst)
   time_format := nowJST.Format("2006-01-02 15:04:05")
-  _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
-  if err_exec != nil{
-    return err_exec
+  before, err_array := Get_latest_state() //get before state
+
+  if err_array == nil {
+    if state != before.State {
+      // different latest state
+      _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+      if err_exec == nil {
+        return nil
+      } else {
+        return err_exec
+      }
+    } else {
+      // same state
+      if state == "ON" {
+        // state ON
+        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
+        if err_exec_first == nil {
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          if err_exec_second == nil {
+            return nil
+          } else {
+            return err_exec_second
+          }
+        } else {
+          return err_exec_first
+        }
+      } else {
+        // state OFF
+        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
+        if err_exec_first == nil {
+          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+          if err_exec_second == nil {
+            return nil
+          } else {
+            return err_exec_second
+          }
+        } else {
+          return err_exec_first
+        }
+      }
+    }
+  } else {
+    return err_array
   }
-  return nil
 }
