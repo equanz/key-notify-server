@@ -158,8 +158,8 @@ func Insert_status(state string) (error){
       // same state
       if state == "ON" {
         // state ON
-        _, err_exec_fitst := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
-        if err_exec_fitst == nil {
+        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
+        if err_exec_first == nil {
           _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
           if err_exec_second == nil {
             return nil
@@ -167,12 +167,12 @@ func Insert_status(state string) (error){
             return err_exec_second
           }
         } else {
-          return err_exec_fitst
+          return err_exec_first
         }
       } else {
         // state OFF
-        _, err_exec_fitst := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
-        if err_exec_fitst == nil {
+        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
+        if err_exec_first == nil {
           _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
           if err_exec_second == nil {
             return nil
@@ -180,7 +180,7 @@ func Insert_status(state string) (error){
             return err_exec_second
           }
         } else {
-          return err_exec_fitst
+          return err_exec_first
         }
       }
     }
