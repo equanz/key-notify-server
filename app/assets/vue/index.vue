@@ -125,5 +125,19 @@
     margin-top: 40px;
     display: flex;
     justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+
+    .screen-sm({
+      flex-direction: row;
+    });
+
+    .screen-md({
+      flex-direction: row;
+    });
+
+    .screen-lg({
+      flex-direction: row;
+    });
   }
 </style>

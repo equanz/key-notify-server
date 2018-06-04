@@ -18,8 +18,23 @@
 
   section{
     background-color: @article-back-color;
-    width: 45vw;
+    width: @content-small-size;
     height: auto;
+
+    .screen-sm({
+      width: 45vw;
+      flex-direction: row;
+    });
+
+    .screen-md({
+      width: 45vw;
+      flex-direction: row;
+    });
+
+    .screen-lg({
+      width: 45vw;
+      flex-direction: row;
+    });
   }
 
   h1{
