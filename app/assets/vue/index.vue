@@ -34,7 +34,7 @@
       return {
         // test data
         weekly_raw_data: [],
-        last_week_data: {"Time":"2018-06-01 16:50:06","State":"ON","Key_info_id":9},
+        last_week_data: {},
         yearly_raw_data: [],
         fiscal_year: 0,
         room_name: "Server Room",
@@ -65,13 +65,20 @@
           console.log('caught some error!')
         })
       },
-      updateLast: function(date) {
+      updateLast: function() {
         APIGet.GetStatistics_Last().then((res) => {
-          console.log(res)
           let last_date = new Date(res.Time)
           // update last data
           this.room_status = res.State
           this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMinutes()}`
+        }).catch(() => {
+          console.log('caught some error!')
+        })
+      },
+      updateLastWeek: function(date) {
+        APIGet.GetStatistics_Before(date).then((res) => {
+          // update last week data
+          this.last_week_data = res
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -86,10 +93,11 @@
       }
     },
     created() {
-      let now = new Date() // test
+      let now = new Date() // last week, year only
       this.updateWeekly(now)
       this.updateYearly(now)
-      this.updateLast(now)
+      this.updateLast()
+      this.updateLastWeek(now)
     }
   }
 </script>

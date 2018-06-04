@@ -2,7 +2,8 @@
 export default {
   GetStatistics_Week: GetStatistics_Week,
   GetStatistics_Year: GetStatistics_Year,
-  GetStatistics_Last: GetStatistics_Last
+  GetStatistics_Last: GetStatistics_Last,
+  GetStatistics_Before: GetStatistics_Before
 }
 
 /**
@@ -133,6 +134,46 @@ function GetStatistics_Last() {
     // send request
     request.responseType = 'json'
     request.open("GET", url)
+    request.addEventListener("load", (event) => {
+      // get server error
+      if(event.target.status != 200){
+        reject()
+      } else {
+        resolve(event.target.response)
+      }
+    })
+    // get connect error
+    request.addEventListener("error", () => {
+      reject()
+    })
+    request.send()
+  })
+}
+
+/**
+ * APIを用い指定した日付の週未満の最新の鍵の情報を取得
+ * @param date {Date} -  get information this param week
+ * @return {Promise} - Promise object
+ */
+function GetStatistics_Before(date_arg){
+  return new Promise(function(resolve, reject){
+    const url = `${location.protocol}//${location.host}/api/before_statistic`
+    let date = new Date(date_arg.getTime())
+    let request = new XMLHttpRequest()
+    // format Date
+    date.setDate(date.getDate() - date.getDay())
+    let month = ''
+    if(date.getMonth() + 1 <= 9){
+      month = "0" + (date.getMonth() + 1).toString()
+    }
+    let day = ''
+    if(date.getDate() <= 9){
+      day = "0" + date.getDate().toString()
+    }
+    let url_param = url + "?date=" + date.getFullYear() + "-" + month + "-" + day + " 00:00:00"
+    // send request
+    request.responseType = 'json'
+    request.open("GET", url_param)
     request.addEventListener("load", (event) => {
       // get server error
       if(event.target.status != 200){

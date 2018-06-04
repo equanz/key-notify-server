@@ -26,7 +26,6 @@
     watch: {
       raw_data: function() {
         // run update
-        console.log('watched')
         this.updatePlotData()
       }
     },
