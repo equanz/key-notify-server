@@ -67,12 +67,12 @@
         for(let i = 0; i < raw_data.length; i++){
           let background_color = "" // initialize
           let plot_value = 0 // time
-          let time_date = new Date(raw_data[i].Time) // convert to type Date from String
+          let time_date = new Date(raw_data[i].Time.replace(/-/g,"/")) // convert to type Date from String
           let plot_array = Array(7).fill(0) // initialize(quota(7) is amount of day)
 
           // not first data
           if(i > 0){
-            let before_time_date = new Date(raw_data[i - 1].Time)
+            let before_time_date = new Date(raw_data[i - 1].Time.replace(/-/g,"/"))
             // same day
             if(before_time_date.getFullYear() == time_date.getFullYear() &&
                before_time_date.getMonth() == time_date.getMonth() &&
@@ -137,8 +137,8 @@
           let now_time_date = new Date()
           let now_time_date_sunday = new Date()
           let last_row = raw_data[raw_data.length - 1]
-          let last_row_time_date = new Date(raw_data[raw_data.length - 1].Time)
-          let last_row_time_date_sunday = new Date(raw_data[raw_data.length - 1].Time)
+          let last_row_time_date = new Date(raw_data[raw_data.length - 1].Time.replace(/-/g,"/"))
+          let last_row_time_date_sunday = new Date(raw_data[raw_data.length - 1].Time.replace(/-/g,"/"))
 
           // get sunday and set
           now_time_date_sunday.setDate(now_time_date_sunday.getDate() - now_time_date_sunday.getDay())
