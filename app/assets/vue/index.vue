@@ -32,7 +32,6 @@
     },
     data() {
       return {
-        // test data
         weekly_raw_data: [],
         last_week_data: {},
         yearly_raw_data: [],
