@@ -48,7 +48,7 @@
         let index_date = new Date(fiscal_year, 3, 1) // initialize to 4/1
 
         // const
-        const BACK_COLOR =  '#f87979'
+        const BACK_COLOR =  '#27AE60'
 
         // copy array
         raw_data = raw_data.concat()

@@ -1,6 +1,6 @@
 <template>
   <section>
-    <p>{{room_name}}</p>
+    <h2>{{room_name}}</h2>
     <figure v-if="status=='ON'" id="status-on"></figure>
     <figure v-else id="status-off"></figure>
     <p>from {{from_time}}</p>
@@ -39,9 +39,15 @@
     });
   }
 
+  h2{
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: normal;
+    font-style: normal;
+  }
+
   p{
     margin: 0 auto;
-    color: @text-black-color;
     font-size: 1.5rem;
   }
 
