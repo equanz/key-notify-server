@@ -46,7 +46,8 @@
         select_date: {
           weekly: '',
           yearly: '',
-        }
+        },
+        update_interval: 60 * 60 * 1000 // 60 min
       }
     },
     methods: {
@@ -103,16 +104,25 @@
         } else{
           return date.getFullYear()
         }
+      },
+      updateAll: function(date) { // update all data
+        this.select_date.weekly = date
+        this.select_date.yearly = date
+        this.updateWeekly(date)
+        this.updateYearly(date)
+        this.updateLast()
+        this.updateLastWeek(date)
       }
     },
     created() {
       let now = new Date() // last week, year only
-      this.select_date.weekly = now
-      this.select_date.yearly = now
-      this.updateWeekly(now)
-      this.updateYearly(now)
-      this.updateLast()
-      this.updateLastWeek(now)
+      this.updateAll(now)
+
+      // time update event
+      setInterval(() => {
+        let now = new Date() // last week, year only
+        this.updateAll(now)
+      }, this.update_interval)
     }
   }
 </script>
