@@ -84,7 +84,7 @@
           let last_date = new Date(res.Time.replace(/-/g,"/"))
           // update last data
           this.room_status = res.State
-          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMinutes()}`
+          this.from_time = `${last_date.getFullYear()}/${this.toZeroFill(last_date.getMonth() + 1, 2)}/${this.toZeroFill(last_date.getDate(), 2)} ${this.toZeroFill(last_date.getHours(), 2)}:${this.toZeroFill(last_date.getMinutes(), 2)}`
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -112,6 +112,19 @@
         this.updateYearly(date)
         this.updateLast()
         this.updateLastWeek(date)
+      },
+      toZeroFill: function(num, place) { // zero fill by place value
+        const cardinal_num = 10
+        const fill_code = '0'
+        let num_place = Math.ceil(Math.log10(num)) // calc place
+
+        if (num_place < place){
+          // zero fill
+          return `${fill_code.repeat(place - num_place)}${num.toString()}`
+        } else{
+          // not fill
+          return num.toString()
+        }
       }
     },
     created() {
