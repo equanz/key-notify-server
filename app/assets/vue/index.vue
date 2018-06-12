@@ -46,7 +46,8 @@
         select_date: {
           weekly: '',
           yearly: '',
-        }
+        },
+        update_interval: 60 * 60 * 1000 // 60 min
       }
     },
     methods: {
@@ -83,7 +84,7 @@
           let last_date = new Date(res.Time.replace(/-/g,"/"))
           // update last data
           this.room_status = res.State
-          this.from_time = `${last_date.getFullYear()}/${last_date.getMonth() + 1}/${last_date.getDate()} ${last_date.getHours()}:${last_date.getMinutes()}`
+          this.from_time = `${last_date.getFullYear()}/${this.toZeroFill(last_date.getMonth() + 1, 2)}/${this.toZeroFill(last_date.getDate(), 2)} ${this.toZeroFill(last_date.getHours(), 2)}:${this.toZeroFill(last_date.getMinutes(), 2)}`
         }).catch(() => {
           console.log('caught some error!')
         })
@@ -103,16 +104,38 @@
         } else{
           return date.getFullYear()
         }
+      },
+      updateAll: function(date) { // update all data
+        this.select_date.weekly = date
+        this.select_date.yearly = date
+        this.updateWeekly(date)
+        this.updateYearly(date)
+        this.updateLast()
+        this.updateLastWeek(date)
+      },
+      toZeroFill: function(num, place) { // zero fill by place value
+        const cardinal_num = 10
+        const fill_code = '0'
+        let num_place = Math.ceil(Math.log10(num)) // calc place
+
+        if (num_place < place){
+          // zero fill
+          return `${fill_code.repeat(place - num_place)}${num.toString()}`
+        } else{
+          // not fill
+          return num.toString()
+        }
       }
     },
     created() {
       let now = new Date() // last week, year only
-      this.select_date.weekly = now
-      this.select_date.yearly = now
-      this.updateWeekly(now)
-      this.updateYearly(now)
-      this.updateLast()
-      this.updateLastWeek(now)
+      this.updateAll(now)
+
+      // time update event
+      setInterval(() => {
+        let now = new Date() // last week, year only
+        this.updateAll(now)
+      }, this.update_interval)
     }
   }
 </script>

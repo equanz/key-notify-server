@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <p>Key Status Dashboard</p>
+    <h1>Key Status Dashboard</h1>
   </nav>
 </template>
 
@@ -22,11 +22,13 @@
     align-items: center;
   }
 
-  p{
+  h1{
     margin: 0;
     margin-left: 1vw;
     color: @text-white-color;
     font-size: 1.5rem;
+    font-weight: normal;
+    font-style: normal;
   }
 </style>
 

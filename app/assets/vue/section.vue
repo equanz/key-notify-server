@@ -1,8 +1,6 @@
 <template>
   <section>
-    <h1>
-      <p>{{section_name}}</p>
-    </h1>
+    <h2>{{section_name}}</h2>
     <slot></slot>
   </section>
 </template>
@@ -37,15 +35,11 @@
     });
   }
 
-  h1{
+  h2{
     margin: 0;
     margin-bottom: 10px;
     background-color: @title-back-color;
-  }
-
-  p{
-    margin: 0;
-    margin-left: 1vw;
+    padding-left: 1vw;
     font-weight: normal;
     font-style: normal;
     font-size: 1rem;

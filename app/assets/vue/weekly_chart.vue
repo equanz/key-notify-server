@@ -59,8 +59,8 @@
 
         // const
         const BACK_COLOR = {
-          ON: '#F87979',
-          OFF: '#7F8C8D'
+          ON: '#27AE60',
+          OFF: '#BDC3C7'
         }
 
 
