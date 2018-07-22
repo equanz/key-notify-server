@@ -162,13 +162,13 @@ function GetStatistics_Before(date_arg){
     let request = new XMLHttpRequest()
     // format Date
     date.setDate(date.getDate() - date.getDay())
-    let month = ''
+    let month = (date.getMonth() + 1).toString()
     if(date.getMonth() + 1 <= 9){
-      month = "0" + (date.getMonth() + 1).toString()
+      month = "0" + month
     }
-    let day = ''
+    let day = date.getDate().toString()
     if(date.getDate() <= 9){
-      day = "0" + date.getDate().toString()
+      day = "0" + day
     }
     let url_param = url + "?date=" + date.getFullYear() + "-" + month + "-" + day + " 00:00:00"
     // send request
