@@ -142,7 +142,7 @@
 
 <style lang="less">
   @import "../less/main.less";
-  @import url(//fonts.googleapis.com/earlyaccess/notosansjp.css);
+  @import url(https://fonts.googleapis.com/earlyaccess/notosansjp.css);
 
   body{
     margin: 0;
