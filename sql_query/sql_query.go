@@ -8,7 +8,7 @@ import(
   "os"
   "time"
   "database/sql"
-  _ "github.com/go-sql-driver/mysql"
+  _ "github.com/lib/pq"
 )
 
 // connection var
@@ -22,9 +22,14 @@ type Key_info struct{
 
 // package initialize
 func init(){
-  db_local, err := sql.Open("mysql", os.Getenv("MARIA_USER") + ":" + os.Getenv("MARIA_PASS") + "@tcp(" + os.Getenv("MARIA_HOST") +":" + os.Getenv("MARIA_PORT") +")/" + os.Getenv("MARIA_DB"))
+  db_local, err := sql.Open("postgres", "host=" + os.Getenv("DB_HOST") + " user=" + os.Getenv("DB_USER") + " dbname=" + os.Getenv("DB_DATABASE") + " password=" + os.Getenv("DB_PASS") + " sslmode=require")
   if err == nil {
-    db = db_local
+    _, err_tz := db_local.Exec("SET TIME ZONE 'Asia/Tokyo'") // setup client timezone
+    if err_tz == nil {
+      db = db_local
+    } else {
+      log.Fatal(err_tz)
+    }
   } else {
     log.Fatal(err)
   }
@@ -57,7 +62,7 @@ func Get_all_statistics() ([]Key_info, error){
 func Get_statistics(fd time.Time,ed time.Time) ([]Key_info, error){
   first_time := fd.Format("2006-01-02 15:04:05")
   end_time := ed.Format("2006-01-02 15:04:05")
-  rows, err := db.Query("SELECT * FROM key_info WHERE time >= ? AND time <= ? ORDER BY time", first_time, end_time)
+  rows, err := db.Query("SELECT * FROM key_info WHERE time >= $1 AND time <= $2 ORDER BY time", first_time, end_time)
   if err != nil {
     return nil, err
   }
@@ -99,7 +104,7 @@ func Get_latest_state() (Key_info, error){
 func Get_before_state(fd time.Time) (Key_info, error){
   nil_key := Key_info{}
   form_time := fd.Format("2006-01-02 15:04:05")
-  rows, err := db.Query("SELECT * FROM key_info WHERE time <= ? ORDER BY time DESC LIMIT 1", form_time)
+  rows, err := db.Query("SELECT * FROM key_info WHERE time <= $1 ORDER BY time DESC LIMIT 1", form_time)
   if err != nil {
     return nil_key, err
   }
@@ -119,7 +124,7 @@ func Get_before_state(fd time.Time) (Key_info, error){
  * app_id: string 要求されたapp_id
 */
 func Has_app_id(app_id string) (bool, error){
-  rows, err := db.Query("SELECT COUNT(*) FROM app_id WHERE app_id = ?", app_id)
+  rows, err := db.Query("SELECT COUNT(*) FROM app_id WHERE app_id = $1", app_id)
   if err != nil {
     return false, err
   }
@@ -152,7 +157,7 @@ func Insert_status(state string) (error){
   if err_array == nil {
     if state != before.State {
       // different latest state
-      _, err_exec := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, state)
+      _, err_exec := db.Exec("INSERT INTO key_info (time, state) VALUES ($1, $2)", time_format, state)
       if err_exec == nil {
         return nil
       } else {
@@ -162,9 +167,9 @@ func Insert_status(state string) (error){
       // same state
       if state == "ON" {
         // state ON
-        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "OFF")
+        _, err_exec_first := db.Exec("INSERT INTO key_info (time, state) VALUES ($1, $2)", time_format, "OFF")
         if err_exec_first == nil {
-          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", second_time_format, state)
+          _, err_exec_second := db.Exec("INSERT INTO key_info (time, state) VALUES ($1, $2)", second_time_format, state)
           if err_exec_second == nil {
             return nil
           } else {
@@ -175,9 +180,9 @@ func Insert_status(state string) (error){
         }
       } else {
         // state OFF
-        _, err_exec_first := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", time_format, "ON")
+        _, err_exec_first := db.Exec("INSERT INTO key_info (time, state) VALUES ($1, $2)", time_format, "ON")
         if err_exec_first == nil {
-          _, err_exec_second := db.Exec("INSERT INTO `key_info` (`time`, `state`) VALUES (?, ?)", second_time_format, state)
+          _, err_exec_second := db.Exec("INSERT INTO key_info (time, state) VALUES ($1, $2)", second_time_format, state)
           if err_exec_second == nil {
             return nil
           } else {

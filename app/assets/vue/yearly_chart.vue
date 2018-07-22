@@ -61,13 +61,13 @@
           let plot_value = 0
 
           while(raw_data_index < raw_data.length){
-            let time_date = new Date(raw_data[raw_data_index].Time.replace(/-/g,"/"))
+            let time_date = new Date(raw_data[raw_data_index].Time)
             // state is ON
             if(raw_data[raw_data_index].State == "ON"){
               if(this.isSameWeek(time_date, index_date) == true){
                 let off_time_date = {} // initialize
                 if(raw_data_index < raw_data.length - 1){
-                  off_time_date = new Date(raw_data[raw_data_index + 1].Time.replace(/-/g,"/"))
+                  off_time_date = new Date(raw_data[raw_data_index + 1].Time)
                 } else{
                   let now_time_date = new Date()
                   let now_fiscal_year = 0

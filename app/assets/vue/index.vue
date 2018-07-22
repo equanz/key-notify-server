@@ -81,7 +81,7 @@
       },
       updateLast: function() {
         APIGet.GetStatistics_Last().then((res) => {
-          let last_date = new Date(res.Time.replace(/-/g,"/"))
+          let last_date = new Date(res.Time)
           // update last data
           this.room_status = res.State
           this.from_time = `${last_date.getFullYear()}/${this.toZeroFill(last_date.getMonth() + 1, 2)}/${this.toZeroFill(last_date.getDate(), 2)} ${this.toZeroFill(last_date.getHours(), 2)}:${this.toZeroFill(last_date.getMinutes(), 2)}`
