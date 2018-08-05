@@ -114,13 +114,12 @@
         this.updateLastWeek(date)
       },
       toZeroFill: function(num, place) { // zero fill by place value
-        const cardinal_num = 10
         const fill_code = '0'
-        let num_place = Math.ceil(Math.log10(num)) // calc place
+        let num_place = Math.floor(Math.log10(num)) // calc place - 1
 
-        if (num_place < place){
+        if (num_place < (place - 1)){
           // zero fill
-          return `${fill_code.repeat(place - num_place)}${num.toString()}`
+          return `${fill_code.repeat((place - 1) - num_place)}${num.toString()}`
         } else{
           // not fill
           return num.toString()
