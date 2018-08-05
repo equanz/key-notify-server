@@ -115,11 +115,11 @@
       },
       toZeroFill: function(num, place) { // zero fill by place value
         const fill_code = '0'
-        let num_place = Math.floor(Math.log10(num)) // calc place - 1
+        let num_place = Math.floor(Math.log10(num)) + 1 // calc place
 
-        if (num_place < (place - 1)){
+        if (num_place < place){
           // zero fill
-          return `${fill_code.repeat((place - 1) - num_place)}${num.toString()}`
+          return `${fill_code.repeat(place - num_place)}${num.toString()}`
         } else{
           // not fill
           return num.toString()
