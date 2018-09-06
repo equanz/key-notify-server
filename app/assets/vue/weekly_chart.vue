@@ -84,6 +84,9 @@
               // fill by last status to before day
               let plot_array_before = Array(7).fill(0) // initialize(quota(7) is amount of day)
               plot_array_before[before_time_date.getDay()] = 24 - before_time_date.getHours()
+              for(let i = before_time_date.getDay() + 1; i < time_date.getDay(); i++){
+                plot_array_before[i] = 24 // fill about all day
+              }
               plot_data.push({
                 backgroundColor: BACK_COLOR[raw_data[i - 1].State],
                 data: plot_array_before
@@ -240,7 +243,6 @@
           }
 
         }
-
         return plot_data
       }
     }
