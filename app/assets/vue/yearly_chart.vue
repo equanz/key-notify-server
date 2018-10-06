@@ -25,9 +25,9 @@
           tooltips: {
             enabled: false
           },
-                   legend: {
-                     display: false
-                   }
+          legend: {
+            display: false
+          }
         }
       }
     },
