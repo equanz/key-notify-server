@@ -14,10 +14,18 @@
               ticks: {
                 beginAtZero: true,
                 max: 24 // max value in x-axes
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "date[hours]"
               }
             }],
             yAxes: [{
-              stacked: true
+              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: "day"
+              }
             }]
           },
           tooltips: {

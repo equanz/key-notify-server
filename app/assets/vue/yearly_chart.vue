@@ -8,12 +8,26 @@
     data() {
       return {
         options: { // options
+          scales: {
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: "date[months]"
+              }
+            }],
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: "active time[hours]"
+              }
+            }]
+          },
           tooltips: {
             enabled: false
           },
-          legend: {
-            display: false
-          }
+                   legend: {
+                     display: false
+                   }
         }
       }
     },
