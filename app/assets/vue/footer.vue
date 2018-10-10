@@ -1,7 +1,7 @@
 <template>
   <footer id="footer">
     <p>
-      Copyright (c) 2018 <a href="https://github.com/equanz">Yuri Mizushima</a>, <a href="https://github.com/amataku">Amano Takumi</a>
+      Copyright (c) 2018 <a href="https://github.com/equanz">Yuri Mizushima</a>, <a href="https://github.com/amataku">amataku</a>
     </p>
   </footer>
 </template>
