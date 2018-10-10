@@ -169,17 +169,29 @@
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
+    section{
+      margin-top: 20px;
+    }
 
     .screen-sm({
       flex-direction: row;
+      section{
+        margin-top: 0px;
+      }
     });
 
     .screen-md({
       flex-direction: row;
+      section{
+        margin-top: 0px;
+      }
     });
 
     .screen-lg({
       flex-direction: row;
+      section{
+        margin-top: 0px;
+      }
     });
   }
 </style>
