@@ -60,8 +60,8 @@ func Get_all_statistics() ([]Key_info, error){
  * ed: time.Time 統計値の取得を終わる指定日時
 */
 func Get_statistics(fd time.Time,ed time.Time) ([]Key_info, error){
-  first_time := fd.Format("2006-01-02 15:04:05")
-  end_time := ed.Format("2006-01-02 15:04:05")
+  first_time := fd.Format("2006-01-02 15:04:05 -07:00")
+  end_time := ed.Format("2006-01-02 15:04:05 -07:00")
   rows, err := db.Query("SELECT * FROM key_info WHERE time >= $1 AND time <= $2 ORDER BY time", first_time, end_time)
   if err != nil {
     return nil, err
@@ -103,7 +103,7 @@ func Get_latest_state() (Key_info, error){
 */
 func Get_before_state(fd time.Time) (Key_info, error){
   nil_key := Key_info{}
-  form_time := fd.Format("2006-01-02 15:04:05")
+  form_time := fd.Format("2006-01-02 15:04:05 -07:00")
   rows, err := db.Query("SELECT * FROM key_info WHERE time <= $1 ORDER BY time DESC LIMIT 1", form_time)
   if err != nil {
     return nil_key, err
@@ -147,11 +147,11 @@ func Has_app_id(app_id string) (bool, error){
 */
 func Insert_status(state string) (error){
   now := time.Now()
-  jst := time.FixedZone("Asia/Tokyo", 9*60*60) //Hour*Minute*Second
+  jst := time.FixedZone("Asia/Tokyo", 9 * 60 * 60) //Hour*Minute*Second
   nowJST := now.In(jst)
   second_time := nowJST.Add(time.Second)
-  time_format := nowJST.Format("2006-01-02 15:04:05")
-  second_time_format := second_time.Format("2006-01-02 15:04:05")
+  time_format := nowJST.Format("2006-01-02 15:04:05 -07:00")
+  second_time_format := second_time.Format("2006-01-02 15:04:05 -07:00")
   before, err_array := Get_latest_state() //get before state
 
   if err_array == nil {
