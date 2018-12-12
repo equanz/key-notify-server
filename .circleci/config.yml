@@ -3,7 +3,7 @@ jobs:
   build:
     # Set Docker image
     docker:
-      - image: equanz/golang-alpine-node:1.8.5
+      - image: equanz/key-notify-server
     working_directory: /go/src/github.com/equanz/key-notify-server
 
     steps:
