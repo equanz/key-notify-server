@@ -88,12 +88,14 @@
 
                   // calc fiscal year
                   if(now_time_date.getMonth() < 3){
-                    now_fiscal_year = now_time_date.getFullYear() + 1
+                    now_fiscal_year = now_time_date.getFullYear() - 1
                   } else{
                     now_fiscal_year = now_time_date.getFullYear()
                   }
+
                   // now year
-                  if(time_date.getFullYear() == now_fiscal_year){
+                  if((time_date.getMonth() >= 3 && time_date.getFullYear() == now_fiscal_year) ||
+                     (time_date.getMonth() < 3 && time_date.getFullYear() == now_fiscal_year + 1)){
                     off_time_date = new Date()
                   } else{ // not now year
                     off_time_date = new Date(time_date.getFullYear(), 2, 31, 23, 59, 59, 999) // 3/31 23:59:59;999
@@ -101,8 +103,8 @@
                     if(off_time_date.getDay() != 6){
                       off_time_date.setDate(off_time_date.getDate() - off_time_date.getDay() - 1) // last day in fiscal year
                     }
-                    raw_data.push(off_time_date)
                   }
+                  raw_data.push(off_time_date)
                 }
 
                 if(this.isSameWeek(off_time_date, index_date) == true){
